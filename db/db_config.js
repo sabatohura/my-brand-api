@@ -4,9 +4,7 @@ const uri = `mongodb+srv://${process.env.MONGO_DB_USERNAME}:${process.env.MONGO_
 const dbConnect = async () => {
   mongoose
     .connect(uri)
-    .then(() => {
-      console.log("connected");
-    })
+    .then()
     .catch((err) => {
       console.error(err);
     });
