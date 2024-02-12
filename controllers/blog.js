@@ -16,4 +16,50 @@ const createBlog = async (req, res) => {
   res.send(blog);
 };
 
-module.exports = { listBlog, createBlog };
+const deleteBlog = async (req, res) => {
+  try {
+    await Blog.deleteOne({ _id: req.params.id });
+    res.status(204).send();
+  } catch {
+    res.status(404);
+    res.send({ error: "Blog doesn't exist!" });
+  }
+};
+
+const getSingleBlog = async (req, res) => {
+  try {
+    const blog = await Blog.findOne({ _id: req.params.id });
+    res.send(blog);
+  } catch {
+    res.status(404);
+    res.send({ error: "Blog doesn't exist!" });
+  }
+};
+
+const updateBlog = async (req, res) => {
+  try {
+    const blog = await Blog.findOne({ _id: req.params.id });
+
+    if (req.body.title) {
+      blog.title = req.body.title;
+    }
+
+    if (req.body.content) {
+      blog.content = req.body.content;
+    }
+
+    await blog.save();
+    res.send(blog);
+  } catch {
+    res.status(404);
+    res.send({ error: "blog doesn't exist!" });
+  }
+};
+
+module.exports = {
+  listBlog,
+  createBlog,
+  deleteBlog,
+  getSingleBlog,
+  updateBlog,
+};
