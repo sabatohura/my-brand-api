@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
-import Blog from "models/Blog";
+import { blogModel } from "./../models";
 
+const Blog = blogModel;
 const listBlog = async (req: Request, res: Response) => {
   const blogs = await Blog.find();
   res.send(blogs);
