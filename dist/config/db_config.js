@@ -1,3 +1,4 @@
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -7,15 +8,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-const mongoose = require("mongoose");
-require("dotenv").config();
+Object.defineProperty(exports, "__esModule", { value: true });
+const dotenv_1 = require("dotenv");
+const mongoose_1 = require("mongoose");
+(0, dotenv_1.config)();
 const uri = `mongodb+srv://${process.env.MONGO_DB_USERNAME}:${process.env.MONGO_DB_PASSWORD}@${process.env.MONGO_DB_CLUSTER_URI}/?retryWrites=true&w=majority`;
-const dbConnect = () => __awaiter(this, void 0, void 0, function* () {
-    mongoose
-        .connect(uri)
-        .then(() => console.log("Connected"))
-        .catch((err) => {
-        console.error(err);
-    });
+const dbConnect = () => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        yield mongoose_1.default.connect(uri);
+        console.log("Connected to MongoDB");
+    }
+    catch (error) {
+        console.error(error);
+    }
 });
-module.exports = dbConnect;
+exports.default = dbConnect;
