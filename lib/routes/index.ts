@@ -11,5 +11,4 @@ import {
 const router = express.Router();
 router.route("/").get(listBlog).post(createBlog);
 router.route("/:id").get(getSingleBlog).put(updateBlog).delete(deleteBlog);
-
 export default router;
