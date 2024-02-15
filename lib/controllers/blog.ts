@@ -50,6 +50,10 @@ const updateBlog = async (req: Request, res: Response) => {
       blog.content = req.body.content;
     }
 
+    if (req.body.likes) {
+      blog.likes = [...new Set([...blog.likes, req.body.likes])];
+    }
+
     await blog.save();
     res.send(blog);
   } catch {
