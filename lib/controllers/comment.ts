@@ -30,7 +30,7 @@ const createComment = async (req: Request, res: Response) => {
     const comment = new Comment({
       commentContent: req.body.content,
       blog: req.params.id,
-      user: req.query.userId || "sabatoars.sa@gmail.com",
+      user: req.query.userId,
     });
     await comment.save();
     res.send(comment);
