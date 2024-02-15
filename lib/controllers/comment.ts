@@ -46,9 +46,17 @@ const updateComment = async (req: Request, res: Response) => {
     if (req.body.status) {
       comment.status = req.body.status;
     }
+    await comment.save();
+    res.send(comment);
   } catch {
     res.status(404).send({ error: "Comment can't be updated" });
   }
 };
 
-export { createComment, listBlogComments, deleteComment, listallBlogComments };
+export {
+  createComment,
+  listBlogComments,
+  deleteComment,
+  listallBlogComments,
+  updateComment,
+};

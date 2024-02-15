@@ -11,6 +11,7 @@ import {
   listBlogComments,
   deleteComment,
   listallBlogComments,
+  updateComment,
 } from "./comment";
 
 export {
@@ -23,4 +24,5 @@ export {
   listBlogComments as listcommentsBlog,
   deleteComment as removeCommentBlog,
   listallBlogComments as listAllComments,
+  updateBlog as changeCommentStatus,
 };

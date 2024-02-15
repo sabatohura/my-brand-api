@@ -1,7 +1,7 @@
 import dbConnect from "./config/db/index";
 import * as express from "express";
 import { config } from "dotenv";
-import { blogRoute } from "./routes";
+import { routeBlog, routeComment } from "./routes";
 
 config();
 dbConnect();
@@ -14,4 +14,5 @@ const app: express.Application = express();
 app.listen(process.env.PORT);
 app.use(express.json());
 app.get(["/", "/api"], redirectToHome);
-app.use("/api/blogs", blogRoute);
+app.use("/api/blogs", routeBlog);
+app.use("/api/comments", routeComment);
