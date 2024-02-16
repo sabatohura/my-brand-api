@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { blogComment } from "./../models";
+import { commentMessageValidate } from "utils/validations";
 
 const Comment = blogComment;
 
@@ -27,16 +28,23 @@ const deleteComment = async (req: Request, res: Response) => {
 
 const createComment = async (req: Request, res: Response) => {
   try {
-    const comment = new Comment({
-      commentContent: req.body.content,
-      blog: req.params.id,
-      user: req.query.userId,
-    });
-    await comment.save();
-    res.send(comment);
+    const valid = commentMessageValidate(req.body);
+    if (!valid.error) {
+      const comment = new Comment({
+        commentContent: req.body.content,
+        blog: req.params.id,
+        user: req.query.userId,
+      });
+      await comment.save();
+      res.status(200).send(comment);
+    } else {
+      res.status(400).send({ error: "comment message can not be validated" });
+    }
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Internal Server Error" });
+    res
+      .status(400)
+      .json({ error: "Comment on this blog could not be proceeded " });
   }
 };
 
