@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { blogModel } from "./../models";
+import { createBlogValidate } from "utils/validations";
 
 const Blog = blogModel;
 const listBlog = async (req: Request, res: Response) => {
@@ -8,14 +9,23 @@ const listBlog = async (req: Request, res: Response) => {
 };
 
 const createBlog = async (req: Request, res: Response) => {
-  const blog = new Blog({
-    title: req.body.title,
-    content: req.body.content,
-    imgUrl: req.body.imgUrl,
-    likes: [],
-  });
-  await blog.save();
-  res.send(blog);
+  try {
+    const valid = createBlogValidate(req.body);
+    if (valid) {
+      const blog = new Blog({
+        title: req.body.title,
+        content: req.body.content,
+        imgUrl: req.body.imgUrl,
+        likes: [],
+      });
+      await blog.save();
+      res.status(200).send(blog);
+    } else {
+      res.status(400).send({ error: "Blog content could not be validated" });
+    }
+  } catch {
+    res.status(400).send({ error: "Could not create a blog" });
+  }
 };
 
 const deleteBlog = async (req: Request, res: Response) => {
