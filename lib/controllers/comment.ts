@@ -3,7 +3,6 @@ import { blogComment } from "./../models";
 import { commentMessageValidate } from "utils/validations";
 
 const Comment = blogComment;
-
 const listBlogComments = async (req: Request, res: Response) => {
   const comments = await Comment.find({
     blog: req.params.id,
