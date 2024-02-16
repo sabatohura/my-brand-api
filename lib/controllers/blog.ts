@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { blogModel } from "./../models";
-import { createBlogValidate } from "utils/validations";
+import { createBlogValidate } from "./../utils/validations";
 
 const Blog = blogModel;
 const listBlog = async (req: Request, res: Response) => {
@@ -11,7 +11,7 @@ const listBlog = async (req: Request, res: Response) => {
 const createBlog = async (req: Request, res: Response) => {
   try {
     const valid = createBlogValidate(req.body);
-    if (valid) {
+    if (!valid.error) {
       const blog = new Blog({
         title: req.body.title,
         content: req.body.content,
