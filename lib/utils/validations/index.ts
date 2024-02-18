@@ -1,7 +1,7 @@
 import { validateLogin, userRegisterValidate } from "./user";
 import blogValidate from "./blog";
 import commentValidate from "./comment";
-import queryMessageValidate from "./query";
+import queryMessageValidate from "./message";
 
 export {
   validateLogin as loginValidate,

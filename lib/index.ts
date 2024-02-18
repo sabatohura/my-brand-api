@@ -2,6 +2,8 @@ import dbConnect from "./config/db/index";
 import * as express from "express";
 import { config } from "dotenv";
 import { routeBlog, routeComment } from "./routes";
+import * as session from "express-session";
+import * as passport from "passport";
 
 config();
 dbConnect();
@@ -11,8 +13,19 @@ const redirectToHome = (req: express.Request, res: express.Response) => {
 };
 
 const app: express.Application = express();
+
 app.listen(process.env.PORT);
 app.use(express.json());
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.get(["/", "/api"], redirectToHome);
 app.use("/api/blogs", routeBlog);
 app.use("/api/comments", routeComment);
