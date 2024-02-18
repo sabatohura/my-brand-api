@@ -4,6 +4,7 @@ import { config } from "dotenv";
 import { routeBlog, routeComment } from "./routes";
 import * as session from "express-session";
 import * as passport from "passport";
+import { ConfigurePassport } from "utils/auth/passport";
 
 config();
 dbConnect();
@@ -25,6 +26,7 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
+ConfigurePassport();
 
 app.get(["/", "/api"], redirectToHome);
 app.use("/api/blogs", routeBlog);

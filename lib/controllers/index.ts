@@ -11,8 +11,8 @@ import {
   listBlogComments,
   deleteComment,
   listallBlogComments,
-  updateComment,
 } from "./comment";
+import { userRegister } from "./user";
 
 export {
   listBlog as blog,
@@ -25,4 +25,5 @@ export {
   deleteComment as removeCommentBlog,
   listallBlogComments as listAllComments,
   updateBlog as changeCommentStatus,
+  userRegister as createUser,
 };

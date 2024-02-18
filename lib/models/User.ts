@@ -1,6 +1,11 @@
 import mongoose from "mongoose";
 import * as bcrypt from "bcrypt";
 
+export interface IUser extends Document {
+  username: string;
+  password: string;
+}
+
 const User = new mongoose.Schema({
   fullNames: { type: String, required: true },
   email: {
@@ -20,7 +25,7 @@ const User = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ["admin", "user"],
+    enum: ["Admin", "User"],
     default: "user",
   },
   status: {
@@ -31,10 +36,10 @@ const User = new mongoose.Schema({
   registerDate: { type: Date, required: true, default: Date.now },
 });
 
-User.pre("save", async function (next) {
+User.pre<IUser>("save", async function (next) {
   const salt = await bcrypt.genSalt(12);
   this.password = await bcrypt.hash(this.password, salt);
   next();
 });
 
-export default mongoose.model("user", User);
+export default mongoose.model<IUser>("user", User);
