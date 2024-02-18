@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { blogComment } from "./../models";
-import { commentMessageValidate } from "utils/validations";
+import { commentMessageValidate } from "./../utils/validations";
 
 const Comment = blogComment;
 const listBlogComments = async (req: Request, res: Response) => {

@@ -10,12 +10,12 @@ const validateLogin = (login: { email: string; password: string }) => {
 };
 
 const userRegisterValidate = (userData: {
-  name: string;
+  fullNames: string;
   password: string;
   email: string;
 }) => {
   const registerSchema = Joi.object({
-    name: Joi.string().min(6).max(40).required(),
+    fullNames: Joi.string().min(6).max(40).required(),
     email: Joi.string().email().required(),
     password: Joi.string().min(8).max(36).required(),
   });
