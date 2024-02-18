@@ -4,21 +4,21 @@ import {
   deleteBlog,
   getSingleBlog,
   updateBlog,
-} from "./blog";
+} from "./blog.controller";
 
 import {
   createComment,
   listBlogComments,
   deleteComment,
   listallBlogComments,
-} from "./comment";
+} from "./comment.controller";
 import {
   deleteMessage,
   listQueryMessages,
   sendMessage,
   updateMessageStatus,
-} from "./message";
-import { userRegister } from "./user";
+} from "./message.controller";
+import { userRegister } from "./user.controller";
 
 export {
   listBlog as blog,

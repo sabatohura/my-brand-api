@@ -1,7 +1,7 @@
-import blogRoute from "./blog";
-import commentRoute from "./comment";
-import messageRoute from "./message";
-import UserRoute from "./user";
+import blogRoute from "./blog.router";
+import commentRoute from "./comment.router";
+import messageRoute from "./message.router";
+import UserRoute from "./user.router";
 export {
   blogRoute as routeBlog,
   commentRoute as routeComment,
