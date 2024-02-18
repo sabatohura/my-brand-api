@@ -12,6 +12,12 @@ import {
   deleteComment,
   listallBlogComments,
 } from "./comment";
+import {
+  deleteMessage,
+  listQueryMessages,
+  sendMessage,
+  updateMessageStatus,
+} from "./message";
 import { userRegister } from "./user";
 
 export {
@@ -26,4 +32,8 @@ export {
   listallBlogComments as listAllComments,
   updateBlog as changeCommentStatus,
   userRegister as createUser,
+  deleteMessage,
+  listQueryMessages,
+  sendMessage,
+  updateMessageStatus,
 };
