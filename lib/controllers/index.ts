@@ -18,7 +18,7 @@ import {
   sendMessage,
   updateMessageStatus,
 } from "./message.controller";
-import { userRegister } from "./user.controller";
+import { userLogin, userRegister } from "./user.controller";
 
 export {
   listBlog as blog,
@@ -32,6 +32,7 @@ export {
   listallBlogComments as listAllComments,
   updateBlog as changeCommentStatus,
   userRegister as createUser,
+  userLogin,
   deleteMessage,
   listQueryMessages,
   sendMessage,

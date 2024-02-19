@@ -1,7 +1,8 @@
 import * as express from "express";
 import { appUser, userInterface } from "../models";
 import * as jwt from "jsonwebtoken";
-import { registerValidate } from "../utils/validations";
+import { loginValidate, registerValidate } from "../utils/validations";
+import * as bcrypt from "bcrypt";
 
 // const createToken = (user: userInterface) => {
 //   return jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, {
@@ -34,5 +35,49 @@ export const userRegister = async (
     }
   } catch (error) {
     res.status(400).send({ error: `User can not be registered ${error}` });
+  }
+};
+
+export const userLogin = async (
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) => {
+  const valid = loginValidate(req.body);
+  if (!valid.error) {
+    try {
+      const user = await appUser.findOne({ email: req.body.email });
+      
+      if (!user) {
+        res.status(401).send({ error: "incorrect username or password" });
+      }
+      const matchPassword = await bcrypt.compare(
+        req.body.password,
+        user.password
+      );
+
+      if (!matchPassword) {
+        res.status(401).send({ error: "Incorrect username or password" });
+      }
+
+      const payload = {
+        email: user.email,
+        id: user._id,
+      };
+
+      const token = jwt.sign(payload, process.env.JWT_SECRET, {
+        expiresIn: process.env.JWT_EXPIRE,
+      });
+
+      return res.status(200).send({
+        message: "logged in",
+        success: true,
+        token: "Bearer " + token,
+      });
+    } catch (error) {
+      res.status(400).send({ error: `could not login due to ${error}` });
+    }
+  } else {
+    res.status(400).send({ error: "Provide provide email and password" });
   }
 };

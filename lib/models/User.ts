@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import * as bcrypt from "bcrypt";
 
 export interface IUser extends Document {
-  username: string;
+  email: string;
   password: string;
 }
 
@@ -21,7 +21,6 @@ const User = new mongoose.Schema({
     type: String,
     required: [true, "Please provide password is required"],
     minlength: 6,
-    select: false,
   },
   role: {
     type: String,
