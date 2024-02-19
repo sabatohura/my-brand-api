@@ -18,7 +18,6 @@ const isAdmin = (req: Request, res: Response, next: NextFunction) => {
     }
 
     req.user = user;
-    console.log(user);
     return next();
   })(req, res, next);
 };

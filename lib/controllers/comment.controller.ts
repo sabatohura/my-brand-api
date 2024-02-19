@@ -30,9 +30,9 @@ const createComment = async (req: Request, res: Response) => {
     const valid = commentMessageValidate(req.body);
     if (!valid.error) {
       const comment = new Comment({
-        commentContent: req.body.content,
+        commentContent: req.body.commentContent,
         blog: req.params.id,
-        user: req.query.userId,
+        user: req.user,
       });
       await comment.save();
       res.status(200).send(comment);

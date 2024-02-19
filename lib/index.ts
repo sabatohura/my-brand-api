@@ -1,7 +1,7 @@
 import dbConnect from "./config/db/index";
 import * as express from "express";
 import { config } from "dotenv";
-import { messageRoute, routeBlog, routeUser } from "./routes";
+import { commentRoute, messageRoute, routeBlog, routeUser } from "./routes";
 import * as session from "express-session";
 import passport from "./config/passport";
 
@@ -29,4 +29,5 @@ app.use(passport.session());
 app.get(["/", "/api"], redirectToHome);
 app.use("/api/blogs", routeBlog);
 app.use("/api/user", routeUser);
+app.use("/api/comments", commentRoute);
 app.use("/api/message", messageRoute);

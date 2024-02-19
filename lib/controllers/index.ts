@@ -11,6 +11,7 @@ import {
   listBlogComments,
   deleteComment,
   listallBlogComments,
+  updateComment,
 } from "./comment.controller";
 import {
   deleteMessage,
@@ -30,7 +31,7 @@ export {
   listBlogComments as listcommentsBlog,
   deleteComment as removeCommentBlog,
   listallBlogComments as listAllComments,
-  updateBlog as changeCommentStatus,
+  updateComment as changeCommentStatus,
   userRegister as createUser,
   userLogin,
   deleteMessage,
