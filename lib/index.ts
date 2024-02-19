@@ -1,10 +1,9 @@
 import dbConnect from "./config/db/index";
 import * as express from "express";
 import { config } from "dotenv";
-import { messageRoute, routeBlog, routeComment, routeUser } from "./routes";
+import { messageRoute, routeBlog, routeUser } from "./routes";
 import * as session from "express-session";
-import * as passport from "passport";
-// import { PassportConfig } from "utils/auth/passport";
+import passport from "./config/passport";
 
 config();
 dbConnect();
@@ -27,10 +26,7 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-// PassportConfig();
-
 app.get(["/", "/api"], redirectToHome);
 app.use("/api/blogs", routeBlog);
-app.use("/api/comments", routeComment);
 app.use("/api/user", routeUser);
 app.use("/api/message", messageRoute);

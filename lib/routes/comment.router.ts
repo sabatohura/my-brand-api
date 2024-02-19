@@ -1,3 +1,4 @@
+import { isAdmin } from "../middlewares";
 import {
   listAllComments,
   commentCreate,
@@ -13,6 +14,6 @@ commentRoute.route("/:id").get(listcommentsBlog).post(commentCreate);
 commentRoute.route("/").get(listAllComments);
 commentRoute
   .route("/manage/:id")
-  .delete(removeCommentBlog)
-  .put(changeCommentStatus);
+  .delete(isAdmin, removeCommentBlog)
+  .put(isAdmin, changeCommentStatus);
 export default commentRoute;

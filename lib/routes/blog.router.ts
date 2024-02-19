@@ -7,8 +7,9 @@ import {
   deleteSBlog,
   getSBlog,
 } from "../controllers";
+import { isAdmin } from "../middlewares";
 const blogRoute = express.Router();
-blogRoute.route("/").get(blog).post(createSBlog);
+blogRoute.route("/").get(blog).post(isAdmin, createSBlog);
 blogRoute.route("/:id").get(getSBlog).put(upSBlog).delete(deleteSBlog);
 
 export default blogRoute;
