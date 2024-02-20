@@ -20,7 +20,7 @@ const deleteComment = async (req: Request, res: Response) => {
     await Comment.deleteOne({ _id: req.params.id });
     res.status(204).send({ status: "deleted" });
   } catch {
-    res.status(404).send({ error: "Comment couldnot be removed on blog" });
+    res.status(404).send({ error: "Comment could not be removed on blog" });
   }
 };
 
@@ -39,7 +39,6 @@ const createComment = async (req: Request, res: Response) => {
       res.status(400).send({ error: "comment message can not be validated" });
     }
   } catch (error) {
-    console.error(error);
     res
       .status(400)
       .json({ error: "Comment on this blog could not be proceeded " });
