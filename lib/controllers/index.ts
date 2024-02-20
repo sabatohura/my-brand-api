@@ -4,6 +4,7 @@ import {
   deleteBlog,
   getSingleBlog,
   updateBlog,
+  likeBlog,
 } from "./blog.controller";
 
 import {
@@ -38,4 +39,5 @@ export {
   listQueryMessages,
   sendMessage,
   updateMessageStatus,
+  likeBlog,
 };

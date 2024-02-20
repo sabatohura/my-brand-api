@@ -1,5 +1,6 @@
 import Blog from "./Blog";
 import Comment from "./Comment";
+import Like from "./Like";
 import Message from "./Message";
 import User, { IUser } from "./User";
 
@@ -9,4 +10,5 @@ export {
   Message as appMessage,
   User as appUser,
   IUser as userInterface,
+  Like,
 };

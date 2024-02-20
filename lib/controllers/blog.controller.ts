@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { blogModel } from "../models";
+import { Like, blogModel } from "../models";
 import { createBlogValidate } from "../utils/validations";
 
 const Blog = blogModel;
@@ -33,8 +33,7 @@ const deleteBlog = async (req: Request, res: Response) => {
     await Blog.deleteOne({ _id: req.params.id });
     res.status(204).send();
   } catch {
-    res.status(404);
-    res.send({ error: "Blog doesn't exist!" });
+    res.status(404).send({ error: "Blog doesn't exist!" });
   }
 };
 
@@ -43,8 +42,7 @@ const getSingleBlog = async (req: Request, res: Response) => {
     const blog = await Blog.findOne({ _id: req.params.id });
     res.send(blog);
   } catch {
-    res.status(404);
-    res.send({ error: "Blog doesn't exist!" });
+    res.status(404).send({ error: "Blog doesn't exist!" });
   }
 };
 
@@ -72,4 +70,32 @@ const updateBlog = async (req: Request, res: Response) => {
   }
 };
 
-export { listBlog, createBlog, deleteBlog, getSingleBlog, updateBlog };
+const likeBlog = async (req: Request, res: Response) => {
+  try {
+    const like = await Like.findOne({
+      blog: req.params.id,
+      user: req.user,
+    });
+    if (like) {
+      await Like.deleteOne({ blog: req.params.id, user: req.user });
+      res.status(200).send({ message: "blog unliked" });
+    } else {
+      const newLike = new Like({ blog: req.params.id, user: req.user });
+      await newLike.save();
+      res.status(200).send({ message: "blog liked" });
+    }
+  } catch (error) {
+    res
+      .status(404)
+      .send({ error: `Comment couldnot be removed on blog due to ${error}` });
+  }
+};
+
+export {
+  listBlog,
+  createBlog,
+  deleteBlog,
+  getSingleBlog,
+  updateBlog,
+  likeBlog,
+};

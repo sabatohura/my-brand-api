@@ -20,8 +20,7 @@ const deleteComment = async (req: Request, res: Response) => {
     await Comment.deleteOne({ _id: req.params.id });
     res.status(204).send({ status: "deleted" });
   } catch {
-    res.status(404);
-    res.send({ error: "Comment couldnot be removed on blog" });
+    res.status(404).send({ error: "Comment couldnot be removed on blog" });
   }
 };
 
