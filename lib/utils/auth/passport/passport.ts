@@ -2,8 +2,6 @@ import * as passport from "passport";
 import * as passportLocal from "passport-local";
 import * as bcrypt from "bcrypt";
 import { appUser } from "models";
-// Configure Passport.js local strategy
-
 export const ConfigurePassport = () => {
   passport.use(
     new passportLocal.Strategy((email, password, done) => {
@@ -22,7 +20,6 @@ export const ConfigurePassport = () => {
     })
   );
 
-  // Serialize and deserialize user
   passport.serializeUser((user, done) => {
     done(null, user);
   });
