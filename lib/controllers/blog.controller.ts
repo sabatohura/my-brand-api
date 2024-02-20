@@ -1,22 +1,36 @@
 import { Request, Response } from "express";
 import { Like, blogModel } from "../models";
 import { createBlogValidate } from "../utils/validations";
+import uploadImage from "../config/cloudinary";
 
 const Blog = blogModel;
 const listBlog = async (req: Request, res: Response) => {
-  const blogs = await Blog.find();
-  res.send(blogs);
+  try {
+    const blogs = await Blog.find();
+    const updatedBlogs = await Promise.all(
+      blogs.map(async (blog) => {
+        const blogLikes = await Like.countDocuments({ blog: blog._id });
+        return {
+          ...blog.toObject(),
+          likes: blogLikes,
+        };
+      })
+    );
+    res.send(updatedBlogs);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ error: "Internal server error" });
+  }
 };
-
 const createBlog = async (req: Request, res: Response) => {
   try {
     const valid = createBlogValidate(req.body);
     if (!valid.error) {
+      const uploadedImage = await uploadImage(req.body.imgUrl);
       const blog = new Blog({
         title: req.body.title,
         content: req.body.content,
-        imgUrl: req.body.imgUrl,
-        likes: [],
+        imgUrl: uploadedImage,
       });
       await blog.save();
       res.status(200).send(blog);
@@ -56,10 +70,6 @@ const updateBlog = async (req: Request, res: Response) => {
 
     if (req.body.content) {
       blog.content = req.body.content;
-    }
-
-    if (req.body.likes) {
-      blog.likes = [...new Set([...blog.likes, req.body.likes])];
     }
 
     await blog.save();
