@@ -7,7 +7,7 @@ const blogValidate = (blog: {
   const blogSchema = Joi.object({
     title: Joi.string().min(10).max(100).required(),
     content: Joi.string().min(100).max(1000).required(),
-    imgUrl: Joi.string().min(20).max(100).required(),
+    imgUrl: Joi.string().uri().required(),
   });
 
   return blogSchema.validate(blog);

@@ -5,10 +5,12 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-const uploadImage = async (imagePath: string): Promise<string> => {
+const uploadImage = async (imageData: Buffer): Promise<string> => {
+  const base64Image = imageData.toString("base64");
+
   return new Promise((resolve, reject) => {
     cloudinary.uploader.upload(
-      imagePath,
+      `data:image/png;base64,${base64Image}`,
       { public_id: "blog_image" },
       (error, result) => {
         if (error) {

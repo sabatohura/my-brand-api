@@ -4,6 +4,7 @@ import { config } from "dotenv";
 import { commentRoute, messageRoute, routeBlog, routeUser } from "./routes";
 import * as session from "express-session";
 import passport from "./config/passport";
+import * as bodyParser from "body-parser";
 
 config();
 dbConnect();
@@ -15,12 +16,20 @@ const redirectToHome = (req: express.Request, res: express.Response) => {
 const app: express.Application = express();
 
 app.listen(process.env.PORT);
+
 app.use(express.json());
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
+  })
+);
+
+app.use(bodyParser.json());
+app.use(
+  bodyParser.urlencoded({
+    extended: true,
   })
 );
 app.use(passport.initialize());

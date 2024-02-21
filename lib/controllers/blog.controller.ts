@@ -1,9 +1,42 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import { Like, blogModel } from "../models";
 import { createBlogValidate } from "../utils/validations";
 import uploadImage from "../config/cloudinary";
+import upload from "../config/multer";
+import * as path from "path";
 
 const Blog = blogModel;
+const createBlog = async (req: any, res: Response) => {
+  try {
+    const uploadedImage = await uploadImage(req.file.buffer);
+
+    const blogInstance = {
+      title: req.body.title,
+      content: req.body.content,
+      imgUrl: uploadedImage,
+    };
+
+    const valid = createBlogValidate(blogInstance);
+
+    if (!valid.error) {
+      const blog = new Blog({
+        title: req.body.title,
+        content: req.body.content,
+        imgUrl: uploadedImage,
+      });
+      await blog.save();
+
+      res.status(200).send({ message: "blog created", data: blog });
+    } else {
+      res.status(400).send({
+        error: `Blog content could not be validated`,
+      });
+    }
+  } catch (error) {
+    res.status(400).send({ error: `Could not create a blog due to` });
+  }
+};
+
 const listBlog = async (req: Request, res: Response) => {
   try {
     const blogs = await Blog.find();
@@ -20,25 +53,6 @@ const listBlog = async (req: Request, res: Response) => {
   } catch (error) {
     console.error(error);
     res.status(500).send({ error: "Internal server error" });
-  }
-};
-const createBlog = async (req: Request, res: Response) => {
-  try {
-    const valid = createBlogValidate(req.body);
-    if (!valid.error) {
-      const uploadedImage = await uploadImage(req.body.imgUrl);
-      const blog = new Blog({
-        title: req.body.title,
-        content: req.body.content,
-        imgUrl: uploadedImage,
-      });
-      await blog.save();
-      res.status(200).send(blog);
-    } else {
-      res.status(400).send({ error: "Blog content could not be validated" });
-    }
-  } catch {
-    res.status(400).send({ error: "Could not create a blog" });
   }
 };
 
