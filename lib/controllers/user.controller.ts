@@ -4,12 +4,6 @@ import * as jwt from "jsonwebtoken";
 import { loginValidate, registerValidate } from "../utils/validations";
 import * as bcrypt from "bcrypt";
 
-// const createToken = (user: userInterface) => {
-//   return jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, {
-//     expiresIn: 86400,
-//   });
-// };
-
 export const userRegister = async (
   req: express.Request,
   res: express.Response

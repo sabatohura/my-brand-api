@@ -10,7 +10,7 @@ const isAdmin = (req: Request, res: Response, next: NextFunction) => {
     if (!user) {
       return res
         .status(401)
-        .json({ error: "Unauthorized. Please login to continue." });
+        .json({ error: "not authenticated. Please login to continue." });
     }
 
     if (user.role !== "Admin") {
