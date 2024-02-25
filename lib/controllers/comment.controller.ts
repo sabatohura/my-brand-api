@@ -4,15 +4,20 @@ import { commentMessageValidate } from "../utils/validations";
 
 const Comment = blogComment;
 const listBlogComments = async (req: Request, res: Response) => {
-  const comments = await Comment.find({
-    blog: req.params.id,
-    status: "Approved",
-  });
-  res.send(comments);
+  try {
+    const comments = await Comment.find({
+      blog: req.params.id,
+      status: "Approved",
+    });
+    res.status(200).send(comments);
+  } catch {
+    res.status(400).send({});
+  }
 };
+
 const listallBlogComments = async (req: Request, res: Response) => {
   const comments = await Comment.find();
-  res.send(comments);
+  res.status(200).send(comments);
 };
 
 const deleteComment = async (req: Request, res: Response) => {
@@ -20,7 +25,7 @@ const deleteComment = async (req: Request, res: Response) => {
     await Comment.deleteOne({ _id: req.params.id });
     res.status(204).send({ status: "deleted" });
   } catch {
-    res.status(404).send({ error: "Comment could not be removed on blog" });
+    res.status(400).send({ error: "Comment could not be removed on blog" });
   }
 };
 
@@ -52,9 +57,9 @@ const updateComment = async (req: Request, res: Response) => {
       comment.status = req.body.status;
     }
     await comment.save();
-    res.send(comment);
+    res.status(200).send(comment);
   } catch {
-    res.status(404).send({ error: "Comment can't be updated" });
+    res.status(400).send({ error: "Comment can't be updated" });
   }
 };
 

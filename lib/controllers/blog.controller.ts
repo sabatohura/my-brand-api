@@ -49,10 +49,13 @@ const listBlog = async (req: Request, res: Response) => {
         };
       })
     );
-    res.send(updatedBlogs);
+    res.status(200).send(updatedBlogs);
   } catch (error) {
     console.error(error);
-    res.status(500).send({ error: "Internal server error" });
+    res.status(400).send({
+      error:
+        "there is an issue with get blogs, please check your internet and try again",
+    });
   }
 };
 
@@ -61,14 +64,14 @@ const deleteBlog = async (req: Request, res: Response) => {
     await Blog.deleteOne({ _id: req.params.id });
     res.status(204).send();
   } catch {
-    res.status(404).send({ error: "Blog doesn't exist!" });
+    res.status(400).send({ error: "There is a problem with deleting a blog" });
   }
 };
 
 const getSingleBlog = async (req: Request, res: Response) => {
   try {
     const blog = await Blog.findOne({ _id: req.params.id });
-    res.send(blog);
+    res.status(200).send(blog);
   } catch {
     res.status(404).send({ error: "Blog doesn't exist!" });
   }
@@ -87,7 +90,7 @@ const updateBlog = async (req: Request, res: Response) => {
     }
 
     await blog.save();
-    res.send(blog);
+    res.status(200).send(blog);
   } catch {
     res.status(404);
     res.send({ error: "blog doesn't exist!" });

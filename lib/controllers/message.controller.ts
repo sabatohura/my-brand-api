@@ -7,7 +7,7 @@ export const listQueryMessages = async (req: Request, res: Response) => {
   if (messages) {
     res.status(200).send(messages);
   } else {
-    res.status(200).send({ message: "you don't have any message" });
+    res.status(400).send({ message: "you don't have any message" });
   }
 };
 
@@ -42,6 +42,6 @@ export const updateMessageStatus = async (req: Request, res: Response) => {
     await message.save();
     res.status(200).send({ message: "Message is read" });
   } catch {
-    res.status(404).send({ error: "message status can't be changed" });
+    res.status(400).send({ error: "message status can't be changed" });
   }
 };

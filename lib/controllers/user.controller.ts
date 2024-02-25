@@ -41,7 +41,7 @@ export const userLogin = async (
   if (!valid.error) {
     try {
       const user = await appUser.findOne({ email: req.body.email });
-      
+
       if (!user) {
         res.status(401).send({ error: "incorrect username or password" });
       }
@@ -69,9 +69,9 @@ export const userLogin = async (
         token: "Bearer " + token,
       });
     } catch (error) {
-      res.status(400).send({ error: `could not login due to ${error}` });
+      res.status(401).send({ error: `could not login due to ${error}` });
     }
   } else {
-    res.status(400).send({ error: "Provide provide email and password" });
+    res.status(401).send({ error: "Provide provide email and password" });
   }
 };
