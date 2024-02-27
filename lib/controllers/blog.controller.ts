@@ -51,7 +51,6 @@ const listBlog = async (req: Request, res: Response) => {
     );
     res.status(200).send(updatedBlogs);
   } catch (error) {
-    console.error(error);
     res.status(400).send({
       error:
         "there is an issue with get blogs, please check your internet and try again",
