@@ -1,192 +1,34 @@
-tags: [
-    {
-      name: "Cats",
-      description: "API for cats in the system",
+/// query     {
+      "name": "Query and Messaging",
+      "description": "API for sending and managing user queries and messages."
     },
-  ],
-  consumes: ["application/json"],
-  produces: ["application/json"],
-  paths: {
-    "/cats": {
-      get: {
-        tags: ["Cats"],
-        summary: "Get all cats in system",
-        responses: {
-          "200": {
-            description: "OK",
-            schema: {
-              $ref: "#/definitions/Cats",
-            },
-          },
+        "Message": {
+        "_id": {
+          "type": "object",
+          "format": "string",
+          "example": "65ca5fdd5aaf79101bfd0213"
         },
+        "message": {
+          "type": "string",
+          "format": "string",
+          "example": "Entering and Succeeding in a Tech Career"
+        },
+        "senderName": {
+          "type": "string",
+          "format": "string",
+          "example": "Sabato Rwanda"
+        },
+        "senderEmail": {
+          "type": "string",
+          "format": "string",
+          "example": "sabato@email.com"
+        },
+        "status": {
+          "type": "string",
+          "format": "string"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
       },
-      post: {
-        tags: ["Cats"],
-        summary: "Create a new cat in system",
-        requestBody: {
-          description: "Cat Object",
-          required: true,
-          content: {
-            "application/json": {
-              schema: {
-                $ref: "#/definitions/Cat",
-              },
-            },
-          },
-        },
-        produces: ["application/json"],
-        responses: {
-          "200": {
-            description: "OK",
-            schema: {
-              $ref: "#/definitions/id",
-            },
-          },
-          "400": {
-            description: "Failed. Bad post data.",
-          },
-        },
-      },
-    },
-    "/cats/{id}": {
-      parameters: [
-        {
-          name: "id",
-          in: "path",
-          required: true,
-          description: "ID of the cat that we want to match",
-          type: "string",
-        },
-      ],
-      get: {
-        tags: ["Cats"],
-        summary: "Get cat with given ID",
-        parameters: [
-          {
-            in: "path",
-            name: "id",
-            required: true,
-            description: "Cat with id",
-            schema: {
-              $ref: "#/definitions/id",
-            },
-          },
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-            schema: {
-              $ref: "#/definitions/Cat",
-            },
-          },
-          "404": {
-            description: "Failed. Cat not found.",
-          },
-        },
-      },
-      put: {
-        summary: "Update cat with given ID",
-        tags: ["Cats"],
-        requestBody: {
-          description: "Cat Object",
-          required: true,
-          content: {
-            "application/json": {
-              schema: {
-                $ref: "#/definitions/Cat",
-              },
-            },
-          },
-        },
-        parameters: [
-          {
-            in: "path",
-            name: "id",
-            required: true,
-            description: "Cat with new values of properties",
-            schema: {
-              $ref: "#/definitions/id",
-            },
-          },
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-            schema: {
-              $ref: "#/definitions/Cat",
-            },
-          },
-          "400": {
-            description: "Failed. Bad post data.",
-          },
-          "404": {
-            description: "Failed. Cat not found.",
-          },
-        },
-      },
-      delete: {
-        summary: "Delete cat with given ID",
-        tags: ["Cats"],
-        parameters: [
-          {
-            in: "path",
-            name: "id",
-            required: true,
-            description: "Delete Cat with id",
-            schema: {
-              $ref: "#/definitions/id",
-            },
-          },
-        ],
-        responses: {
-          "200": {
-            description: "OK",
-            schema: {
-              $ref: "#/definitions/id",
-            },
-          },
-          "404": {
-            description: "Failed. Cat not found.",
-          },
-        },
-      },
-    },
-  },
-  definitions: {
-    id: {
-      properties: {
-        uuid: {
-          type: "string",
-        },
-      },
-    },
-    Cat: {
-      type: "object",
-      properties: {
-        genus: {
-          type: "string",
-        },
-        name: {
-          type: "string",
-        },
-        isHungry: {
-          type: "boolean",
-        },
-        lastFedDate: {
-          type: "string",
-        },
-      },
-    },
-    Cats: {
-      type: "object",
-      properties: {
-        cats: {
-          type: "object",
-          additionalProperties: {
-            $ref: "#/definitions/Cat",
-          },
-        },
-      },
-    },
-  },
-};
