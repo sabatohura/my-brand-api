@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "pretty": true,
+    "target": "es6",
+    "outDir": "./dist",
+    "baseUrl": "./lib",
+    "skipLibCheck": true
+  },
+  "include": ["lib/**/*.ts", "lib/**/*"],
+  "exclude": ["node_modules"]
+}

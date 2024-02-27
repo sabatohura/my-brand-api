@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const Message = new mongoose.Schema({
   message: { type: String, required: true },
@@ -8,4 +8,4 @@ const Message = new mongoose.Schema({
   createdAt: { type: Date, required: true, default: Date.now },
 });
 
-module.exports = mongoose.model("message", Message);
+export default mongoose.model("message", Message);
