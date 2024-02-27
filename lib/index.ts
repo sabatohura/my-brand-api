@@ -6,7 +6,7 @@ import * as session from "express-session";
 import passport from "./config/passport";
 import * as bodyParser from "body-parser";
 import * as swaggerUiExpress from "swagger-ui-express";
-import { swaggerSpec } from "./config/swagger";
+import * as swaggerDoc from "./swagger.json";
 
 config();
 dbConnect();
@@ -36,7 +36,7 @@ app.use(
 
 app.use(passport.initialize());
 app.use(passport.session());
-app.use("/api/docs", swaggerUI.serve, swaggerUI.setup(swaggerSpec));
+app.use("/api/docs", swaggerUI.serve, swaggerUI.setup(swaggerDoc));
 app.get(["/", "/api"], redirectToHome);
 app.use("/api/blogs", routeBlog);
 app.use("/api/user", routeUser);
