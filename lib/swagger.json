@@ -1,0 +1,658 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "My Brand App API Documentation 3.0",
+    "version": "1.0.0",
+    "description": "A unified API for managing my portfolio, blog, and client interactions. \nSome useful links:\n- [My Brand App](https://sabatohura.github.io/my-brand)"
+  },
+  "servers": [
+    {
+      "url": "https://my-brand-api-04bc.onrender.com/api"
+    },
+    {
+      "url": "http://localhost:7060/api"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Blogs",
+      "description": "API for creating and managing blogs in the system."
+    },
+    {
+      "name": "Likes and Comments",
+      "description": "API for creating comment, liking and unliking blogs."
+    },
+    {
+      "name": "Users",
+      "description": "API for creating and logging in users in the system."
+    }
+  ],
+  "schemes": ["HTTP", "HTTPS"],
+  "paths": {
+    "/blogs": {
+      "get": {
+        "tags": ["Blogs"],
+        "summary": "Find All blogs",
+        "description": "Returns all blogs",
+        "operationId": "getAllBlogs",
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "500": {
+            "description": "Server error"
+          },
+          "404": {
+            "description": "Page not found"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Blogs"],
+        "summary": "Add a new blog",
+        "description": "Add a new blog",
+        "operationId": "addBlog",
+        "requestBody": {
+          "description": "Create a new blog",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Blog"
+              }
+            },
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "imgUrl": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "content": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/Blog"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "jwt": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Blog"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "422": {
+            "description": "Validation exception"
+          }
+        }
+      }
+    },
+    "/blogs/{blogId}": {
+      "get": {
+        "tags": ["Blogs"],
+        "summary": "Find blog by ID",
+        "description": "Return a single blog",
+        "operationId": "getBlogById",
+        "parameters": [
+          {
+            "name": "blogId",
+            "in": "path",
+            "description": "ID of blog to return",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Blog"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid ID provided"
+          },
+          "404": {
+            "description": "blog not found"
+          }
+        },
+        "security": [
+          {
+            "jwt": {}
+          }
+        ]
+      },
+      "patch": {
+        "tags": ["Blogs"],
+        "summary": "Update an existing blog",
+        "description": "Update an existing blog by Id",
+        "operationId": "updateBlog",
+        "requestBody": {
+          "description": "Update an existent blog in the app",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Blog"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/Blog"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Blog Successful updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Blog"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid ID provided"
+          },
+          "404": {
+            "description": "blog not found"
+          },
+          "422": {
+            "description": "Validation exception"
+          }
+        },
+        "security": [
+          {
+            "jwt": {}
+          }
+        ]
+      },
+      "delete": {
+        "tags": ["Blogs"],
+        "summary": "Deletes a blog",
+        "description": "delete a blog",
+        "operationId": "deleteBlog",
+        "parameters": [
+          {
+            "name": "blogId",
+            "in": "path",
+            "description": "blog id to delete",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "blog deleted"
+          },
+          "400": {
+            "description": "Invalid blog item"
+          },
+          "403": {
+            "description": "Not authorized"
+          },
+          "500": {
+            "description": "Error while deleting blog"
+          }
+        },
+        "security": [
+          {
+            "jwt": []
+          }
+        ]
+      }
+    },
+    "/blogs/{blogId}/comments": {
+      "get": {
+        "tags": ["Likes and Comments"],
+        "summary": "Find blog comments by ID",
+        "description": "Return a single blog comments",
+        "operationId": "getBlogCommentsById",
+        "parameters": [
+          {
+            "name": "blogId",
+            "in": "path",
+            "description": "ID of blog to return it's comments",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Comment"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid ID provided"
+          },
+          "404": {
+            "description": "blog not found"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Likes and Comments"],
+        "summary": "Creating a blog comment by blogID",
+        "description": "Creating a single blog comments",
+        "operationId": "CreateBlogCommentById",
+        "parameters": [
+          {
+            "name": "blogId",
+            "in": "path",
+            "description": "ID of blog to comment on",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Created Comment",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Comment"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Comment"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid ID provided"
+          },
+          "401": {
+            "description": "Not authorized"
+          },
+          "404": {
+            "description": "Blog not found"
+          }
+        },
+        "security": [
+          {
+            "jwt": {}
+          }
+        ]
+      }
+    },
+    "/blogs/{blogId}/like": {
+      "get": {
+        "tags": ["Likes and Comments"],
+        "summary": "Like a single blog",
+        "description": "Liking and disliking single blog",
+        "operationId": "likeBlogById",
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Like"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid ID provided"
+          },
+          "401": {
+            "description": "Not authenticated"
+          },
+          "404": {
+            "description": "blog not found"
+          }
+        },
+        "security": [
+          {
+            "jwt": {}
+          }
+        ]
+      }
+    },
+    "/comments/{commentId}": {
+      "patch": {
+        "tags": ["Likes and Comments"],
+        "summary": "Update comment status",
+        "operationId": "UpdateBlogStatus",
+        "parameters": [
+          {
+            "name": "commentId",
+            "in": "path",
+            "description": "ID of comment to approve",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Update an existing blog comment status",
+          "content": {
+            "application/json": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "format": "string"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Comment"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid ID provided"
+          },
+          "401": {
+            "description": "Not authorized"
+          },
+          "404": {
+            "description": "blog not found"
+          }
+        },
+        "security": [
+          {
+            "jwt": {}
+          }
+        ]
+      }
+    },
+    "/user/register": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "Create user account",
+        "operationId": "createUser",
+        "requestBody": {
+          "description": "Created user object",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "default": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/login": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "Logs user into the system",
+        "description": "",
+        "operationId": "loginUser",
+        "requestBody": {
+          "description": "Created user object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "token": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid username/password supplied"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Blog": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "format": "string",
+            "example": "65dd91ccfbaf67b06b33c031"
+          },
+          "title": {
+            "type": "string",
+            "format": "string",
+            "example": "Entering and Succeeding in a Tech Career"
+          },
+          "content": {
+            "type": "string",
+            "format": "string",
+            "example": "blog content"
+          },
+          "imgUrl": {
+            "type": "string",
+            "format": "binary"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "xml": {
+          "name": "blog"
+        }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "format": "string",
+            "example": "65ca5fdd5aaf79101bfd0213"
+          },
+          "fullNames": {
+            "type": "string",
+            "example": "Sabato Rwanda"
+          },
+          "email": {
+            "type": "string",
+            "example": "sabato@email.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "1234567"
+          },
+          "status": {
+            "type": "string",
+            "format": "string",
+            "example": "Approved"
+          },
+          "role": {
+            "type": "string",
+            "format": "string",
+            "example": "User"
+          },
+          "registerDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "xml": {
+          "name": "user"
+        }
+      },
+      "Comment": {
+        "_id": {
+          "type": "object",
+          "format": "string",
+          "example": "65ca5fdd5aaf79101bfd0213"
+        },
+        "commentContent": {
+          "type": "string",
+          "format": "string",
+          "example": "Entering and Succeeding in a Tech Career"
+        },
+        "blog": {
+          "$ref": "#/components/schemas/Blog"
+        },
+        "user": {
+          "$ref": "#/components/schemas/User"
+        },
+        "status": {
+          "type": "string",
+          "format": "string",
+          "example": "Approved"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "Like": {
+        "_id": {
+          "type": "object",
+          "format": "string",
+          "example": "65ca5fdd5aaf79101bfd0213"
+        },
+        "blog": {
+          "$ref": "#/components/schemas/Blog"
+        },
+        "user": {
+          "$ref": "#/components/schemas/User"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+
+      "ApiResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "type": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "xml": {
+          "name": "##default"
+        }
+      }
+    },
+    "securitySchemes": {
+      "jwt": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}

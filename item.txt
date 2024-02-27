@@ -1,0 +1,34 @@
+/// query     {
+      "name": "Query and Messaging",
+      "description": "API for sending and managing user queries and messages."
+    },
+        "Message": {
+        "_id": {
+          "type": "object",
+          "format": "string",
+          "example": "65ca5fdd5aaf79101bfd0213"
+        },
+        "message": {
+          "type": "string",
+          "format": "string",
+          "example": "Entering and Succeeding in a Tech Career"
+        },
+        "senderName": {
+          "type": "string",
+          "format": "string",
+          "example": "Sabato Rwanda"
+        },
+        "senderEmail": {
+          "type": "string",
+          "format": "string",
+          "example": "sabato@email.com"
+        },
+        "status": {
+          "type": "string",
+          "format": "string"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
