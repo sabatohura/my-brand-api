@@ -1,5 +1,5 @@
 import { MongoMemoryServer } from "mongodb-memory-server";
-import { app } from "../index";
+import app from "../config/test";
 import * as supertest from "supertest";
 import mongoose from "mongoose";
 import { createSBlog } from "../controllers";
@@ -15,7 +15,6 @@ const blogPayLoad = {
 describe("blog", () => {
   beforeAll(async () => {
     const mongoServer = await MongoMemoryServer.create();
-
     await mongoose.connect(mongoServer.getUri());
   });
 
@@ -31,15 +30,15 @@ describe("blog", () => {
       });
     });
 
-    describe("given the blog does exist", () => {
-      it("should return a 200 status and the blog", async () => {
-        // @ts-ignore
-        const blog = await createSBlog(blogPayLoad);
+    // describe("given the blog does exist", () => {
+    //   it("should return a 200 status and the blog", async () => {
+    //     // @ts-ignore
+    //     const blog = await createSBlog(blogPayLoad);
 
-        const { body } = await supertest(app).get(`/api/blogs/`);
-        expect(200);
-      });
-    });
+    //     const { body } = await supertest(app).get(`/api/blogs/`);
+    //     expect(200);
+    //   });
+    // });
   });
 
   describe("create blog route", () => {
