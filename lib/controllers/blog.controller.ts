@@ -1,9 +1,7 @@
-import { Request, Response, NextFunction } from "express";
+import { Request, Response } from "express";
 import { Like, blogModel } from "../models";
 import { createBlogValidate } from "../utils/validations";
 import uploadImage from "../config/cloudinary";
-import upload from "../config/multer";
-import * as path from "path";
 
 const Blog = blogModel;
 const createBlog = async (req: any, res: Response) => {
