@@ -1,5 +1,5 @@
-[![CI](https://github.com/sabatohura/my-brand-api/actions/workflows/main.yml/badge.svg)](https://github.com/sabatohura/my-brand-api/actions/workflows/main.yml) [![Coverage Status](https://coveralls.io/repos/github/sabatohura/my-brand-api/badge.svg?branch=main)](https://coveralls.io/github/sabatohura/my-brand-api?branch=main)
-
+![Codecov (with branch)](https://img.shields.io/codecov/c/github/sabatohura/my-brand-api/main?logo=circleci)
+![Codecov](https://img.shields.io/codecov/c/github/sabatohura/my-brand-api?logo=circleci)
 
 # My Brand APP API
 
@@ -20,16 +20,19 @@ Welcome to the repository for My brand app! This project serves as both a portfo
 - **Commenting System:** Allow visitors to engage with your blogs by leaving comments.
 - **Inquiry and Messaging:** Receive inquiries and messages from users interested in your services.
 
-## Technologies & Languages
+## 🛠 Tools & 💻 Tech Stacks
 
-- NodeJs
-- ExpressJs
-- Typescript
-- Javascript
-- Jest
-- MongoDb
-- Cloudinary
-- Swagger
+<img alt="node.js" src="https://img.shields.io/badge/node.js-90C53F.svg?&style=for-the-badge&logo=node.js&logoColor=fff" />&nbsp;
+<img alt="typescript" src="https://img.shields.io/badge/typescript-007ACC.svg?&style=for-the-badge&logo=typescript&logoColor=fff" />&nbsp;
+<img alt="javascript" src="https://img.shields.io/badge/javascript-F7DF1E.svg?&style=for-the-badge&logo=javascript&logoColor=fff" />&nbsp;
+<img alt="mongodb" src="https://img.shields.io/badge/mongodb-26A944.svg?&style=for-the-badge&logo=mongodb&logoColor=fff" />&nbsp;
+<img alt="jest" src="https://img.shields.io/badge/jest-C21325.svg?&style=for-the-badge&logo=jest&logoColor=fff" />&nbsp;
+<img alt="testing-library" src="https://img.shields.io/badge/rtl-D62B2A.svg?&style=for-the-badge&logo=testing-library&logoColor=fff" />&nbsp;
+<img alt="git" src="https://img.shields.io/badge/git-F05033.svg?&style=for-the-badge&logo=git&logoColor=fff" />&nbsp;
+<img alt="github" src="https://img.shields.io/badge/github-000.svg?&style=for-the-badge&logo=github&logoColor=fff" />&nbsp;
+<img alt="vs code" src="https://img.shields.io/badge/vs code-007ACC.svg?&style=for-the-badge&logo=visual-studio-code&logoColor=fff" />&nbsp;
+<img alt="Static Badge" src="https://img.shields.io/badge/express-js?style=for-the-badge&logo=express&logoColor=black">&nbsp;
+<img alt="Static Badge" src="https://img.shields.io/badge/swagger-js?style=for-the-badge&logo=express&logoColor=black&color=red">&nbsp;
 
 ## Installation
 
