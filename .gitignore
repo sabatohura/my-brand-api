@@ -3,3 +3,5 @@ node_modules/
 old/
 dist/
 coverage/
+item.txt
+messageSwaggerdoc.txt

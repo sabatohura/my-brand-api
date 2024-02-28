@@ -7,7 +7,10 @@
   },
   "servers": [
     {
-      "url": "https://my-brand-api-04bc.onrender.com/api/docs"
+      "url": "https://my-brand-api-04bc.onrender.com/api"
+    },
+    {
+      "url": "http://localhost:7060/api"
     }
   ],
   "tags": [
@@ -16,112 +19,84 @@
       "description": "API for creating and managing blogs in the system."
     },
     {
-      "name": "Query and Messaging",
-      "description": "API for sending and managing user queries and messages."
+      "name": "Likes and Comments",
+      "description": "API for creating comment, liking and unliking blogs."
     },
     {
       "name": "Users",
       "description": "API for creating and logging in users in the system."
     }
   ],
+  "schemes": ["HTTP", "HTTPS"],
   "paths": {
-    "/pet": {
-      "put": {
+    "/blogs": {
+      "get": {
         "tags": ["Blogs"],
-        "summary": "Update an existing pet",
-        "description": "Update an existing pet by Id",
-        "operationId": "updatePet",
-        "requestBody": {
-          "description": "Update an existent pet in the store",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Pet"
-              }
-            },
-            "application/xml": {
-              "schema": {
-                "$ref": "#/components/schemas/Pet"
-              }
-            },
-            "application/x-www-form-urlencoded": {
-              "schema": {
-                "$ref": "#/components/schemas/Pet"
-              }
-            }
-          },
-          "required": true
-        },
+        "summary": "Find All blogs",
+        "description": "Returns all blogs",
+        "operationId": "getAllBlogs",
         "responses": {
           "200": {
-            "description": "Successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Pet"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/Pet"
-                }
-              }
-            }
+            "description": "successful operation"
           },
-          "400": {
-            "description": "Invalid ID supplied"
+          "500": {
+            "description": "Server error"
           },
           "404": {
-            "description": "Pet not found"
-          },
-          "422": {
-            "description": "Validation exception"
+            "description": "Page not found"
           }
-        },
-        "security": [
-          {
-            "petstore_auth": ["write:pets", "read:pets"]
-          }
-        ]
+        }
       },
       "post": {
         "tags": ["Blogs"],
-        "summary": "Add a new pet to the store",
-        "description": "Add a new pet to the store",
-        "operationId": "addPet",
+        "summary": "Add a new blog",
+        "description": "Add a new blog",
+        "operationId": "addBlog",
         "requestBody": {
-          "description": "Create a new pet in the store",
+          "description": "Create a new blog",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Pet"
+                "$ref": "#/components/schemas/Blog"
               }
             },
-            "application/xml": {
+            "multipart/form-data": {
               "schema": {
-                "$ref": "#/components/schemas/Pet"
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "imgUrl": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "content": {
+                    "type": "string"
+                  }
+                }
               }
             },
             "application/x-www-form-urlencoded": {
               "schema": {
-                "$ref": "#/components/schemas/Pet"
+                "$ref": "#/components/schemas/Blog"
               }
             }
           },
           "required": true
         },
+        "security": [
+          {
+            "jwt": []
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful operation",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Pet"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/Pet"
+                  "$ref": "#/components/schemas/Blog"
                 }
               }
             }
@@ -132,31 +107,24 @@
           "422": {
             "description": "Validation exception"
           }
-        },
-        "security": [
-          {
-            "petstore_auth": ["write:pets", "read:pets"]
-          }
-        ]
+        }
       }
     },
-    "/pet/findByStatus": {
+    "/blogs/{blogId}": {
       "get": {
         "tags": ["Blogs"],
-        "summary": "Finds Pets by status",
-        "description": "Multiple status values can be provided with comma separated strings",
-        "operationId": "findPetsByStatus",
+        "summary": "Find blog by ID",
+        "description": "Return a single blog",
+        "operationId": "getBlogById",
         "parameters": [
           {
-            "name": "status",
-            "in": "query",
-            "description": "Status values that need to be considered for filter",
-            "required": false,
-            "explode": true,
+            "name": "blogId",
+            "in": "path",
+            "description": "ID of blog to return",
+            "required": true,
             "schema": {
               "type": "string",
-              "default": "available",
-              "enum": ["available", "pending", "sold"]
+              "format": "string"
             }
           }
         ],
@@ -166,325 +134,170 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Pet"
-                  }
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Pet"
-                  }
+                  "$ref": "#/components/schemas/Blog"
                 }
               }
             }
           },
           "400": {
-            "description": "Invalid status value"
-          }
-        },
-        "security": [
-          {
-            "petstore_auth": ["write:pets", "read:pets"]
-          }
-        ]
-      }
-    },
-    "/pet/findByTags": {
-      "get": {
-        "tags": ["Blogs"],
-        "summary": "Finds Pets by tags",
-        "description": "Multiple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.",
-        "operationId": "findPetsByTags",
-        "parameters": [
-          {
-            "name": "tags",
-            "in": "query",
-            "description": "Tags to filter by",
-            "required": false,
-            "explode": true,
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Pet"
-                  }
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Pet"
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid tag value"
-          }
-        },
-        "security": [
-          {
-            "petstore_auth": ["write:pets", "read:pets"]
-          }
-        ]
-      }
-    },
-    "/pet/{petId}": {
-      "get": {
-        "tags": ["Blogs"],
-        "summary": "Find pet by ID",
-        "description": "Returns a single pet",
-        "operationId": "getPetById",
-        "parameters": [
-          {
-            "name": "petId",
-            "in": "path",
-            "description": "ID of pet to return",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Pet"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/Pet"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid ID supplied"
+            "description": "Invalid ID provided"
           },
           "404": {
-            "description": "Pet not found"
+            "description": "blog not found"
           }
         },
         "security": [
           {
-            "api_key": []
-          },
-          {
-            "petstore_auth": ["write:pets", "read:pets"]
+            "jwt": {}
           }
         ]
       },
-      "post": {
+      "patch": {
         "tags": ["Blogs"],
-        "summary": "Updates a pet in the store with form data",
-        "description": "",
-        "operationId": "updatePetWithForm",
-        "parameters": [
-          {
-            "name": "petId",
-            "in": "path",
-            "description": "ID of pet that needs to be updated",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          },
-          {
-            "name": "name",
-            "in": "query",
-            "description": "Name of pet that needs to be updated",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "status",
-            "in": "query",
-            "description": "Status of pet that needs to be updated",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "400": {
-            "description": "Invalid input"
-          }
-        },
-        "security": [
-          {
-            "petstore_auth": ["write:pets", "read:pets"]
-          }
-        ]
-      },
-      "delete": {
-        "tags": ["Blogs"],
-        "summary": "Deletes a pet",
-        "description": "delete a pet",
-        "operationId": "deletePet",
-        "parameters": [
-          {
-            "name": "api_key",
-            "in": "header",
-            "description": "",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "petId",
-            "in": "path",
-            "description": "Pet id to delete",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "400": {
-            "description": "Invalid pet value"
-          }
-        },
-        "security": [
-          {
-            "petstore_auth": ["write:pets", "read:pets"]
-          }
-        ]
-      }
-    },
-    "/pet/{petId}/uploadImage": {
-      "post": {
-        "tags": ["Blogs"],
-        "summary": "uploads an image",
-        "description": "",
-        "operationId": "uploadFile",
-        "parameters": [
-          {
-            "name": "petId",
-            "in": "path",
-            "description": "ID of pet to update",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          },
-          {
-            "name": "additionalMetadata",
-            "in": "query",
-            "description": "Additional Metadata",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
+        "summary": "Update an existing blog",
+        "description": "Update an existing blog by Id",
+        "operationId": "updateBlog",
         "requestBody": {
-          "content": {
-            "application/octet-stream": {
-              "schema": {
-                "type": "string",
-                "format": "binary"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiResponse"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "petstore_auth": ["write:pets", "read:pets"]
-          }
-        ]
-      }
-    },
-    "/store/inventory": {
-      "get": {
-        "tags": ["store"],
-        "summary": "Returns pet inventories by status",
-        "description": "Returns a map of status codes to quantities",
-        "operationId": "getInventory",
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "additionalProperties": {
-                    "type": "integer",
-                    "format": "int32"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "api_key": []
-          }
-        ]
-      }
-    },
-    "/store/order": {
-      "post": {
-        "tags": ["store"],
-        "summary": "Place an order for a pet",
-        "description": "Place a new order in the store",
-        "operationId": "placeOrder",
-        "requestBody": {
+          "description": "Update an existent blog in the app",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Order"
-              }
-            },
-            "application/xml": {
-              "schema": {
-                "$ref": "#/components/schemas/Order"
+                "$ref": "#/components/schemas/Blog"
               }
             },
             "application/x-www-form-urlencoded": {
               "schema": {
-                "$ref": "#/components/schemas/Order"
+                "$ref": "#/components/schemas/Blog"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Blog Successful updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Blog"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid ID provided"
+          },
+          "404": {
+            "description": "blog not found"
+          },
+          "422": {
+            "description": "Validation exception"
+          }
+        },
+        "security": [
+          {
+            "jwt": {}
+          }
+        ]
+      },
+      "delete": {
+        "tags": ["Blogs"],
+        "summary": "Deletes a blog",
+        "description": "delete a blog",
+        "operationId": "deleteBlog",
+        "parameters": [
+          {
+            "name": "blogId",
+            "in": "path",
+            "description": "blog id to delete",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "blog deleted"
+          },
+          "400": {
+            "description": "Invalid blog item"
+          },
+          "403": {
+            "description": "Not authorized"
+          },
+          "500": {
+            "description": "Error while deleting blog"
+          }
+        },
+        "security": [
+          {
+            "jwt": []
+          }
+        ]
+      }
+    },
+    "/blogs/{blogId}/comments": {
+      "get": {
+        "tags": ["Likes and Comments"],
+        "summary": "Find blog comments by ID",
+        "description": "Return a single blog comments",
+        "operationId": "getBlogCommentsById",
+        "parameters": [
+          {
+            "name": "blogId",
+            "in": "path",
+            "description": "ID of blog to return it's comments",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Comment"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid ID provided"
+          },
+          "404": {
+            "description": "blog not found"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Likes and Comments"],
+        "summary": "Creating a blog comment by blogID",
+        "description": "Creating a single blog comments",
+        "operationId": "CreateBlogCommentById",
+        "parameters": [
+          {
+            "name": "blogId",
+            "in": "path",
+            "description": "ID of blog to comment on",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Created Comment",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Comment"
               }
             }
           }
@@ -495,94 +308,125 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Order"
+                  "$ref": "#/components/schemas/Comment"
                 }
               }
             }
           },
           "400": {
-            "description": "Invalid input"
+            "description": "Invalid ID provided"
           },
-          "422": {
-            "description": "Validation exception"
+          "401": {
+            "description": "Not authorized"
+          },
+          "404": {
+            "description": "Blog not found"
           }
-        }
+        },
+        "security": [
+          {
+            "jwt": {}
+          }
+        ]
       }
     },
-    "/store/order/{orderId}": {
+    "/blogs/{blogId}/like": {
       "get": {
-        "tags": ["store"],
-        "summary": "Find purchase order by ID",
-        "description": "For valid response try integer IDs with value <= 5 or > 10. Other values will generate exceptions.",
-        "operationId": "getOrderById",
-        "parameters": [
-          {
-            "name": "orderId",
-            "in": "path",
-            "description": "ID of order that needs to be fetched",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
+        "tags": ["Likes and Comments"],
+        "summary": "Like a single blog",
+        "description": "Liking and disliking single blog",
+        "operationId": "likeBlogById",
         "responses": {
           "200": {
             "description": "successful operation",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Order"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/Order"
+                  "$ref": "#/components/schemas/Like"
                 }
               }
             }
           },
           "400": {
-            "description": "Invalid ID supplied"
+            "description": "Invalid ID provided"
+          },
+          "401": {
+            "description": "Not authenticated"
           },
           "404": {
-            "description": "Order not found"
+            "description": "blog not found"
           }
-        }
-      },
-      "delete": {
-        "tags": ["store"],
-        "summary": "Delete purchase order by ID",
-        "description": "For valid response try integer IDs with value < 1000. Anything above 1000 or nonintegers will generate API errors",
-        "operationId": "deleteOrder",
+        },
+        "security": [
+          {
+            "jwt": {}
+          }
+        ]
+      }
+    },
+    "/comments/{commentId}": {
+      "patch": {
+        "tags": ["Likes and Comments"],
+        "summary": "Update comment status",
+        "operationId": "UpdateBlogStatus",
         "parameters": [
           {
-            "name": "orderId",
+            "name": "commentId",
             "in": "path",
-            "description": "ID of the order that needs to be deleted",
+            "description": "ID of comment to approve",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int64"
+              "type": "string",
+              "format": "string"
             }
           }
         ],
+        "requestBody": {
+          "description": "Update an existing blog comment status",
+          "content": {
+            "application/json": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "format": "string"
+                }
+              }
+            }
+          }
+        },
         "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Comment"
+                }
+              }
+            }
+          },
           "400": {
-            "description": "Invalid ID supplied"
+            "description": "Invalid ID provided"
+          },
+          "401": {
+            "description": "Not authorized"
           },
           "404": {
-            "description": "Order not found"
+            "description": "blog not found"
           }
-        }
+        },
+        "security": [
+          {
+            "jwt": {}
+          }
+        ]
       }
     },
-    "/user": {
+    "/user/register": {
       "post": {
-        "tags": ["user"],
-        "summary": "Create user",
-        "description": "This can only be done by the logged in user.",
+        "tags": ["Users"],
+        "summary": "Create user account",
         "operationId": "createUser",
         "requestBody": {
           "description": "Created user object",
@@ -591,18 +435,9 @@
               "schema": {
                 "$ref": "#/components/schemas/User"
               }
-            },
-            "application/xml": {
-              "schema": {
-                "$ref": "#/components/schemas/User"
-              }
-            },
-            "application/x-www-form-urlencoded": {
-              "schema": {
-                "$ref": "#/components/schemas/User"
-              }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "default": {
@@ -612,111 +447,55 @@
                 "schema": {
                   "$ref": "#/components/schemas/User"
                 }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/User"
-                }
               }
             }
-          }
-        }
-      }
-    },
-    "/user/createWithList": {
-      "post": {
-        "tags": ["user"],
-        "summary": "Creates list of users with given input array",
-        "description": "Creates list of users with given input array",
-        "operationId": "createUsersWithListInput",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/User"
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/User"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/User"
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "successful operation"
           }
         }
       }
     },
     "/user/login": {
-      "get": {
-        "tags": ["user"],
+      "post": {
+        "tags": ["Users"],
         "summary": "Logs user into the system",
         "description": "",
         "operationId": "loginUser",
-        "parameters": [
-          {
-            "name": "username",
-            "in": "query",
-            "description": "The user name for login",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "password",
-            "in": "query",
-            "description": "The password for login in clear text",
-            "required": false,
-            "schema": {
-              "type": "string"
+        "requestBody": {
+          "description": "Created user object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "successful operation",
-            "headers": {
-              "X-Rate-Limit": {
-                "description": "calls per hour allowed by the user",
-                "schema": {
-                  "type": "integer",
-                  "format": "int32"
-                }
-              },
-              "X-Expires-After": {
-                "description": "date in UTC when token expires",
-                "schema": {
-                  "type": "string",
-                  "format": "date-time"
-                }
-              }
-            },
             "content": {
-              "application/xml": {
-                "schema": {
-                  "type": "string"
-                }
-              },
               "application/json": {
                 "schema": {
-                  "type": "string"
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "token": {
+                      "type": "string"
+                    }
+                  }
                 }
               }
             }
@@ -726,342 +505,129 @@
           }
         }
       }
-    },
-    "/user/logout": {
-      "get": {
-        "tags": ["user"],
-        "summary": "Logs out current logged in user session",
-        "description": "",
-        "operationId": "logoutUser",
-        "parameters": [],
-        "responses": {
-          "default": {
-            "description": "successful operation"
-          }
-        }
-      }
-    },
-    "/user/{username}": {
-      "get": {
-        "tags": ["user"],
-        "summary": "Get user by user name",
-        "description": "",
-        "operationId": "getUserByName",
-        "parameters": [
-          {
-            "name": "username",
-            "in": "path",
-            "description": "The name that needs to be fetched. Use user1 for testing. ",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/User"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/User"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid username supplied"
-          },
-          "404": {
-            "description": "User not found"
-          }
-        }
-      },
-      "put": {
-        "tags": ["user"],
-        "summary": "Update user",
-        "description": "This can only be done by the logged in user.",
-        "operationId": "updateUser",
-        "parameters": [
-          {
-            "name": "username",
-            "in": "path",
-            "description": "name that need to be deleted",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "description": "Update an existent user in the store",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/User"
-              }
-            },
-            "application/xml": {
-              "schema": {
-                "$ref": "#/components/schemas/User"
-              }
-            },
-            "application/x-www-form-urlencoded": {
-              "schema": {
-                "$ref": "#/components/schemas/User"
-              }
-            }
-          }
-        },
-        "responses": {
-          "default": {
-            "description": "successful operation"
-          }
-        }
-      },
-      "delete": {
-        "tags": ["user"],
-        "summary": "Delete user",
-        "description": "This can only be done by the logged in user.",
-        "operationId": "deleteUser",
-        "parameters": [
-          {
-            "name": "username",
-            "in": "path",
-            "description": "The name that needs to be deleted",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "400": {
-            "description": "Invalid username supplied"
-          },
-          "404": {
-            "description": "User not found"
-          }
-        }
-      }
     }
   },
   "components": {
     "schemas": {
-      "Order": {
+      "Blog": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int64",
-            "example": 10
+          "_id": {
+            "type": "string",
+            "format": "string",
+            "example": "65dd91ccfbaf67b06b33c031"
           },
-          "petId": {
-            "type": "integer",
-            "format": "int64",
-            "example": 198772
+          "title": {
+            "type": "string",
+            "format": "string",
+            "example": "Entering and Succeeding in a Tech Career"
           },
-          "quantity": {
-            "type": "integer",
-            "format": "int32",
-            "example": 7
+          "content": {
+            "type": "string",
+            "format": "string",
+            "example": "blog content"
           },
-          "shipDate": {
+          "imgUrl": {
+            "type": "string",
+            "format": "binary"
+          },
+          "createdAt": {
             "type": "string",
             "format": "date-time"
           },
-          "status": {
+          "updatedAt": {
             "type": "string",
-            "description": "Order Status",
-            "example": "approved",
-            "enum": ["placed", "approved", "delivered"]
-          },
-          "complete": {
-            "type": "boolean"
+            "format": "date-time"
           }
         },
         "xml": {
-          "name": "order"
-        }
-      },
-      "Customer": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int64",
-            "example": 100000
-          },
-          "username": {
-            "type": "string",
-            "example": "fehguy"
-          },
-          "address": {
-            "type": "array",
-            "xml": {
-              "name": "addresses",
-              "wrapped": true
-            },
-            "items": {
-              "$ref": "#/components/schemas/Address"
-            }
-          }
-        },
-        "xml": {
-          "name": "customer"
-        }
-      },
-      "Address": {
-        "type": "object",
-        "properties": {
-          "street": {
-            "type": "string",
-            "example": "437 Lytton"
-          },
-          "city": {
-            "type": "string",
-            "example": "Palo Alto"
-          },
-          "state": {
-            "type": "string",
-            "example": "CA"
-          },
-          "zip": {
-            "type": "string",
-            "example": "94301"
-          }
-        },
-        "xml": {
-          "name": "address"
-        }
-      },
-      "Category": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int64",
-            "example": 1
-          },
-          "name": {
-            "type": "string",
-            "example": "Dogs"
-          }
-        },
-        "xml": {
-          "name": "category"
+          "name": "blog"
         }
       },
       "User": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int64",
-            "example": 10
-          },
-          "username": {
+          "_id": {
             "type": "string",
-            "example": "theUser"
+            "format": "string",
+            "example": "65ca5fdd5aaf79101bfd0213"
           },
-          "firstName": {
+          "fullNames": {
             "type": "string",
-            "example": "John"
-          },
-          "lastName": {
-            "type": "string",
-            "example": "James"
+            "example": "Sabato Rwanda"
           },
           "email": {
             "type": "string",
-            "example": "john@email.com"
+            "example": "sabato@email.com"
           },
           "password": {
             "type": "string",
-            "example": "12345"
+            "example": "1234567"
           },
-          "phone": {
+          "status": {
             "type": "string",
-            "example": "12345"
+            "format": "string",
+            "example": "Approved"
           },
-          "userStatus": {
-            "type": "integer",
-            "description": "User Status",
-            "format": "int32",
-            "example": 1
+          "role": {
+            "type": "string",
+            "format": "string",
+            "example": "User"
+          },
+          "registerDate": {
+            "type": "string",
+            "format": "date-time"
           }
         },
         "xml": {
           "name": "user"
         }
       },
-      "Tag": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "name": {
-            "type": "string"
-          }
+      "Comment": {
+        "_id": {
+          "type": "object",
+          "format": "string",
+          "example": "65ca5fdd5aaf79101bfd0213"
         },
-        "xml": {
-          "name": "tag"
+        "commentContent": {
+          "type": "string",
+          "format": "string",
+          "example": "Entering and Succeeding in a Tech Career"
+        },
+        "blog": {
+          "$ref": "#/components/schemas/Blog"
+        },
+        "user": {
+          "$ref": "#/components/schemas/User"
+        },
+        "status": {
+          "type": "string",
+          "format": "string",
+          "example": "Approved"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
         }
       },
-      "Pet": {
-        "required": ["name", "photoUrls"],
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int64",
-            "example": 10
-          },
-          "name": {
-            "type": "string",
-            "example": "doggie"
-          },
-          "category": {
-            "$ref": "#/components/schemas/Category"
-          },
-          "photoUrls": {
-            "type": "array",
-            "xml": {
-              "wrapped": true
-            },
-            "items": {
-              "type": "string",
-              "xml": {
-                "name": "photoUrl"
-              }
-            }
-          },
-          "tags": {
-            "type": "array",
-            "xml": {
-              "wrapped": true
-            },
-            "items": {
-              "$ref": "#/components/schemas/Tag"
-            }
-          },
-          "status": {
-            "type": "string",
-            "description": "pet status in the store",
-            "enum": ["available", "pending", "sold"]
-          }
+      "Like": {
+        "_id": {
+          "type": "object",
+          "format": "string",
+          "example": "65ca5fdd5aaf79101bfd0213"
         },
-        "xml": {
-          "name": "pet"
+        "blog": {
+          "$ref": "#/components/schemas/Blog"
+        },
+        "user": {
+          "$ref": "#/components/schemas/User"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
         }
       },
+
       "ApiResponse": {
         "type": "object",
         "properties": {
@@ -1081,53 +647,11 @@
         }
       }
     },
-    "requestBodies": {
-      "Pet": {
-        "description": "Pet object that needs to be added to the store",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/Pet"
-            }
-          },
-          "application/xml": {
-            "schema": {
-              "$ref": "#/components/schemas/Pet"
-            }
-          }
-        }
-      },
-      "UserArray": {
-        "description": "List of user object",
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/components/schemas/User"
-              }
-            }
-          }
-        }
-      }
-    },
     "securitySchemes": {
-      "petstore_auth": {
-        "type": "oauth2",
-        "flows": {
-          "implicit": {
-            "authorizationUrl": "https://petstore3.swagger.io/oauth/authorize",
-            "scopes": {
-              "write:pets": "modify pets in your account",
-              "read:pets": "read your pets"
-            }
-          }
-        }
-      },
-      "api_key": {
-        "type": "apiKey",
-        "name": "api_key",
-        "in": "header"
+      "jwt": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
       }
     }
   }
