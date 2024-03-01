@@ -1,7 +1,2 @@
-import * as express from "express";
-
-const app: express.Application = express();
-app.listen(8000);
-app.use(express.json());
-
+import { app } from "../../index";
 export default app;
