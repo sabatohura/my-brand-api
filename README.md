@@ -1,5 +1,4 @@
-![Codecov (with branch)](https://img.shields.io/codecov/c/github/sabatohura/my-brand-api/main?logo=circleci)
-![Codecov](https://img.shields.io/codecov/c/github/sabatohura/my-brand-api?logo=circleci)
+[![codecov](https://codecov.io/gh/sabatohura/my-brand-api/graph/badge.svg?token=J8IWNEUKC4)](https://codecov.io/gh/sabatohura/my-brand-api)
 
 # My Brand APP API
 
