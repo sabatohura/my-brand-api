@@ -3,6 +3,8 @@
 version: 2.1
 orbs:
   node: circleci/node@5
+  codecov: codecov/codecov@4.0.1
+
 jobs:
   test-node:
     # Install node dependencies and run tests
@@ -22,8 +24,12 @@ jobs:
       # Replace this with steps to deploy to users
       - run:
           name: deploy
-          command: '#e.g. ./deploy.sh'
+          command: "#e.g. ./deploy.sh"
 workflows:
+  upload-to-codecov:
+    jobs:
+      - checkout
+      - codecov/upload
   build-and-test:
     jobs:
       - test-node
