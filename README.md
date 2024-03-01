@@ -1,4 +1,3 @@
-![Codecov (with branch)](https://img.shields.io/codecov/c/github/sabatohura/my-brand-api/main?logo=circleci)
 ![Codecov](https://img.shields.io/codecov/c/github/sabatohura/my-brand-api?logo=circleci)
 
 # My Brand APP API
