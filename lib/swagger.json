@@ -15,16 +15,16 @@
   ],
   "tags": [
     {
+      "name": "Users",
+      "description": "API for creating and logging in users in the system."
+    },
+    {
       "name": "Blogs",
       "description": "API for creating and managing blogs in the system."
     },
     {
       "name": "Likes and Comments",
       "description": "API for creating comment, liking and unliking blogs."
-    },
-    {
-      "name": "Users",
-      "description": "API for creating and logging in users in the system."
     }
   ],
   "schemes": ["HTTP", "HTTPS"],
@@ -55,11 +55,6 @@
         "requestBody": {
           "description": "Create a new blog",
           "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Blog"
-              }
-            },
             "multipart/form-data": {
               "schema": {
                 "type": "object",
@@ -75,11 +70,6 @@
                     "type": "string"
                   }
                 }
-              }
-            },
-            "application/x-www-form-urlencoded": {
-              "schema": {
-                "$ref": "#/components/schemas/Blog"
               }
             }
           },
@@ -297,7 +287,12 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Comment"
+                "type": "object",
+                "properties": {
+                  "commentContent": {
+                    "type": "string"
+                  }
+                }
               }
             }
           }
@@ -308,7 +303,12 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Comment"
+                  "type": "object",
+                  "properties": {
+                    "commentContent": {
+                      "type": "string"
+                    }
+                  }
                 }
               }
             }
@@ -385,11 +385,12 @@
           "description": "Update an existing blog comment status",
           "content": {
             "application/json": {
-              "type": "object",
-              "properties": {
-                "status": {
-                  "type": "string",
-                  "format": "string"
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "commentContent": {
+                    "type": "string"
+                  }
                 }
               }
             }
@@ -433,7 +434,18 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/User"
+                "type": "object",
+                "properties": {
+                  "fullNames": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                }
               }
             }
           },
@@ -445,7 +457,18 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/User"
+                  "type": "object",
+                  "properties": {
+                    "fullNames": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "registered Successful"
+                    }
+                  }
                 }
               }
             }
