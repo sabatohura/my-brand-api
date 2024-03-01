@@ -154,11 +154,6 @@
               "schema": {
                 "$ref": "#/components/schemas/Blog"
               }
-            },
-            "application/x-www-form-urlencoded": {
-              "schema": {
-                "$ref": "#/components/schemas/Blog"
-              }
             }
           },
           "required": true
@@ -252,7 +247,22 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Comment"
+                  "type": "object",
+                  "properties": {
+                    "user": {
+                      "schema": {
+                        "$ref": "#/components/schemas/Blog"
+                      }
+                    },
+                    "blog": {
+                      "schema": {
+                        "$ref": "#/components/schemas/User"
+                      }
+                    },
+                    "commentContent": {
+                      "type": "string"
+                    }
+                  }
                 }
               }
             }
@@ -305,6 +315,16 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "user": {
+                      "schema": {
+                        "$ref": "#/components/schemas/Blog"
+                      }
+                    },
+                    "blog": {
+                      "schema": {
+                        "$ref": "#/components/schemas/User"
+                      }
+                    },
                     "commentContent": {
                       "type": "string"
                     }
@@ -336,13 +356,30 @@
         "summary": "Like a single blog",
         "description": "Liking and disliking single blog",
         "operationId": "likeBlogById",
+        "parameters": [
+          {
+            "name": "blogId",
+            "in": "path",
+            "description": "ID of blog to like",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "successful operation",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Like"
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
                 }
               }
             }
@@ -388,7 +425,7 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "commentContent": {
+                  "status": {
                     "type": "string"
                   }
                 }
@@ -402,7 +439,12 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Comment"
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
                 }
               }
             }
