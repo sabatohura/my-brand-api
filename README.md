@@ -7,10 +7,10 @@ Welcome to the repository for My brand app! This project serves as both a portfo
 ## Table of Contents
 
 - [Features](#features)
-- [Technologies & Languages](#technologies)
+- [🛠 Technologies & 💻 Tech Stacks](#technologies--tech%20stacks)
 - [Installation](#installation)
 - [Usage](#usage)
-- [Useful Links](#links)
+- [Useful Links](#useful--links)
 
 ## Features
 
@@ -19,7 +19,7 @@ Welcome to the repository for My brand app! This project serves as both a portfo
 - **Commenting System:** Allow visitors to engage with your blogs by leaving comments.
 - **Inquiry and Messaging:** Receive inquiries and messages from users interested in your services.
 
-## 🛠 Tools & 💻 Tech Stacks
+## 🛠 Technologies & 💻 Tech Stacks
 
 <img alt="node.js" src="https://img.shields.io/badge/node.js-90C53F.svg?&style=for-the-badge&logo=node.js&logoColor=fff" />&nbsp;
 <img alt="typescript" src="https://img.shields.io/badge/typescript-007ACC.svg?&style=for-the-badge&logo=typescript&logoColor=fff" />&nbsp;
