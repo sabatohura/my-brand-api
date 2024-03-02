@@ -7,7 +7,6 @@ const Blog = blogModel;
 const createBlog = async (req: any, res: Response) => {
   try {
     const uploadedImage = await uploadImage(req.file.buffer);
-
     const blogInstance = {
       title: req.body.title,
       content: req.body.content,
@@ -27,11 +26,14 @@ const createBlog = async (req: any, res: Response) => {
       res.status(200).send({ message: "blog created", data: blog });
     } else {
       res.status(400).send({
-        error: `Blog content could not be validated`,
+        error: `Please provide valid ${valid.error.details[0].path}`,
       });
     }
   } catch (error) {
-    res.status(400).send({ error: `Could not create a blog due to` });
+    res.status(503).send({
+      error: `Blog creation failed please try again later `,
+      dataError: error,
+    });
   }
 };
 
@@ -49,7 +51,7 @@ const listBlog = async (req: Request, res: Response) => {
     );
     res.status(200).send(updatedBlogs);
   } catch (error) {
-    res.status(400).send({
+    res.status(503).send({
       error:
         "there is an issue with get blogs, please check your internet and try again",
     });
@@ -59,7 +61,7 @@ const listBlog = async (req: Request, res: Response) => {
 const deleteBlog = async (req: Request, res: Response) => {
   try {
     await Blog.deleteOne({ _id: req.params.id });
-    res.status(204).send();
+    res.status(204).send({ message: "Blog deleted successful" });
   } catch {
     res.status(400).send({ error: "There is a problem with deleting a blog" });
   }
@@ -89,8 +91,7 @@ const updateBlog = async (req: Request, res: Response) => {
     await blog.save();
     res.status(200).send(blog);
   } catch {
-    res.status(404);
-    res.send({ error: "blog doesn't exist!" });
+    res.status(503).send({ error: `There is a problem with updating blog` });
   }
 };
 
@@ -109,9 +110,9 @@ const likeBlog = async (req: Request, res: Response) => {
       res.status(200).send({ message: "blog liked" });
     }
   } catch (error) {
-    res
-      .status(404)
-      .send({ error: `Comment couldnot be removed on blog due to ${error}` });
+    res.status(503).send({
+      error: `could not like or dislike blog please try again later`,
+    });
   }
 };
 

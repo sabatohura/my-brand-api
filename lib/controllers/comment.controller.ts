@@ -9,15 +9,15 @@ const listBlogComments = async (req: Request, res: Response) => {
       blog: req.params.id,
       status: "Approved",
     });
-    res.status(200).send(comments);
+    res.status(200).send({ comments: comments });
   } catch {
-    res.status(400).send({});
+    res.status(204).send({ message: "blog has no comments" });
   }
 };
 
 const listallBlogComments = async (req: Request, res: Response) => {
   const comments = await Comment.find();
-  res.status(200).send(comments);
+  res.status(200).send({ Comments: comments });
 };
 
 const deleteComment = async (req: Request, res: Response) => {
@@ -39,14 +39,16 @@ const createComment = async (req: Request, res: Response) => {
         user: req.user,
       });
       await comment.save();
-      res.status(200).send(comment);
+      res.status(200).send({ message: "Comment Created", data: comment });
     } else {
-      res.status(400).send({ error: "comment message can not be validated" });
+      res.status(400).send({
+        error: `Please provide valid ${valid.error.details[0].path}`,
+      });
     }
   } catch (error) {
     res
-      .status(400)
-      .json({ error: "Comment on this blog could not be proceeded " });
+      .status(503)
+      .send({ error: `Could not comment on this blog please try again later` });
   }
 };
 
@@ -57,9 +59,11 @@ const updateComment = async (req: Request, res: Response) => {
       comment.status = req.body.status;
     }
     await comment.save();
-    res.status(200).send(comment);
+    res
+      .status(200)
+      .send({ message: "Comment  Status Updated Successfull", data: comment });
   } catch {
-    res.status(400).send({ error: "Comment can't be updated" });
+    res.status(400).send({ error: "Comment Status can't be updated" });
   }
 };
 
