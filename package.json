@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest --coverage",
-    "test:watch": "jest --watch",
+    "test:watch": "jest --watch --coverage --detectOpenHandles --verbose",
     "start": "node ./dist/index.js",
     "server": "nodemon ./dist/index.js"
   },
