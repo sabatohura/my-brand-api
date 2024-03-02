@@ -7,7 +7,7 @@ export const listQueryMessages = async (req: Request, res: Response) => {
   if (messages) {
     res.status(200).send(messages);
   } else {
-    res.status(400).send({ message: "you don't have any message" });
+    res.status(200).send({ message: "You haven't received any message yet" });
   }
 };
 
@@ -19,11 +19,14 @@ export const sendMessage = async (req: Request, res: Response) => {
       await message.save();
       res.status(200).send(message);
     } else {
-      res.status(400).send({ error: "Message fields can not be validated" });
+      res.status(400).send({
+        error: `Please provide valid ${valid.error.details[0].path}`,
+      });
     }
   } catch (error) {
-    res.status(400).send({ error: `could not send message due to ${error}` });
-    res.status(400).send({ error: `User can not be registered ${error}` });
+    res
+      .status(503)
+      .send({ error: `Sending message failed please try again later` });
   }
 };
 
@@ -31,7 +34,7 @@ export const deleteMessage = async (req: Request, res: Response) => {
   try {
     await appMessage.deleteOne({ _id: req.params.id });
   } catch {
-    res.status(404).send({ error: "message doesn't exist!" });
+    res.status(400).send({ error: `Message you are deleting doesn't exist` });
   }
 };
 

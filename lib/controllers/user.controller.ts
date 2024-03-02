@@ -25,10 +25,14 @@ export const userRegister = async (
         return res.status(201).send({ "New User created": newUser });
       }
     } else {
-      res.status(400).send({ error: "User could not be validated" });
+      res.status(400).send({
+        error: `Please provide valid ${valid.error.details[0].path}`,
+      });
     }
   } catch (error) {
-    res.status(400).send({ error: `User can not be registered ${error}` });
+    res
+      .status(503)
+      .send({ error: `User Registration failed please try again later` });
   }
 };
 
@@ -41,7 +45,6 @@ export const userLogin = async (
   if (!valid.error) {
     try {
       const user = await appUser.findOne({ email: req.body.email });
-
       if (!user) {
         res.status(401).send({ error: "incorrect username or password" });
       }
@@ -69,9 +72,11 @@ export const userLogin = async (
         token: "Bearer " + token,
       });
     } catch (error) {
-      res.status(401).send({ error: `could not login due to ${error}` });
+      res.status(503).send({ error: `Login failed please try again later` });
     }
   } else {
-    res.status(401).send({ error: "Provide provide email and password" });
+    res.status(400).send({
+      error: `Please provide valid ${valid.error.details[0].path}`,
+    });
   }
 };
