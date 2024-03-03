@@ -5,3 +5,4 @@ dist/
 coverage/
 item.txt
 messageSwaggerdoc.txt
+examples/

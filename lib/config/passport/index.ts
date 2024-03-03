@@ -1,7 +1,8 @@
 import * as passport from "passport";
 import { Strategy as JwtStrategy, ExtractJwt } from "passport-jwt";
 import { appUser } from "../../models";
-
+import { config } from "dotenv";
+config();
 const User = appUser;
 
 const jwtOptions = {

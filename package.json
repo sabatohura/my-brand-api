@@ -2,12 +2,13 @@
   "name": "mybrand-blog",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "./dist/server.js",
   "scripts": {
     "test": "jest --coverage",
-    "test:watch": "jest --watch",
-    "start": "node ./dist/index.js",
-    "server": "nodemon ./dist/index.js"
+    "test:watch": "jest --watch --watchAll --coverage --detectOpenHandles --verbose",
+    "start": "node ./dist/server.js",
+    "server": "nodemon ./dist/server.js",
+    "build": "tsc"
   },
   "author": "",
   "license": "ISC",
