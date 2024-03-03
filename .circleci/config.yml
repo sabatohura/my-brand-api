@@ -1,4 +1,5 @@
 version: 2.1
+
 orbs:
   node: circleci/node@5.0.2
   codecov: codecov/codecov@4.0.1
@@ -12,7 +13,7 @@ jobs:
           pkg-manager: npm
       - run:
           name: Install Dependencies
-          command: npm i --save
+          command: npm ci
       - run:
           name: compile tsc
           command: npm run build
@@ -20,23 +21,14 @@ jobs:
           name: Run tests
           command: npm run test
 
-  # deploy:
-  #   # This is an example deploy job, not actually used by the workflow
-  #   docker:
-  #     - image: cimg/base:stable
-  #   steps:
-  #     # Replace this with steps to deploy to users
-  #     - run:
-  #         name: deploy
-  #         command: "#e.g. ./deploy.sh"
-# workflows:
-#   upload-to-codecov:
-#     jobs:
-#       - checkout
-#       - codecov/upload
-#   build-and-test:
-#     jobs:
-#       - test-node
-#     # - deploy:
-#     #     requires:
-#     #       - test-node
+workflows:
+  version: 2
+  upload-to-codecov:
+    jobs:
+      - test-node
+      - codecov/upload:
+          requires:
+            - test-node
+  build-and-test:
+    jobs:
+      - test-node
