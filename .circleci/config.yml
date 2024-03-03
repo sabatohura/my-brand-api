@@ -1,9 +1,6 @@
 version: 2.1
-
 orbs:
   node: circleci/node@5.0.2
-  # codecov: codecov/codecov@4.0.1
-
 jobs:
   test-node:
     executor: node/default
@@ -13,7 +10,7 @@ jobs:
           pkg-manager: npm
       - run:
           name: Install Dependencies
-          command: npm ci
+          command: npm install
       - run:
           name: compile tsc
           command: npm run build
@@ -22,13 +19,6 @@ jobs:
           command: npm run test
 
 workflows:
-  # version: 2
-  # upload-to-codecov:
-  #   jobs:
-  #     - test-node
-  #     - codecov/upload:
-  #         requires:
-  #           - test-node
   build-and-test:
     jobs:
       - test-node
