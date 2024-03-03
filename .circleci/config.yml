@@ -9,9 +9,6 @@ jobs:
       - node/install-packages:
           pkg-manager: npm
       - run:
-          name: Install Dependencies
-          command: npm install
-      - run:
           name: compile tsc
           command: npm run build
       - run:
