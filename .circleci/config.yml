@@ -9,17 +9,13 @@ jobs:
       - node/install-packages:
           pkg-manager: npm
       - run:
-          name: To install Dependencies
-          command: install
+          command: npm install
       - run:
-          name: To install CI
-          command: install
+          command: npm ci
       - run:
-          name: compile tsc
-          command: run build
+          command: npm run build
       - run:
-          name: Run tests
-          command: run test
+          command: npm run test
 
 workflows:
   build-and-test:
