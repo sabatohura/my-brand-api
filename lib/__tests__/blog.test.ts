@@ -1,51 +1,44 @@
-import { MongoMemoryServer } from "mongodb-memory-server";
-import app from "../config/test";
-import * as supertest from "supertest";
+import { config } from "dotenv";
+import { test, it, describe, expect, beforeAll, afterAll } from "@jest/globals";
 import mongoose from "mongoose";
-import { createSBlog } from "../controllers";
+import * as supertest from "supertest";
+import app from "./../index";
+config();
 
-const blogPayLoad = {
-  title: "this is a new blog we are creating with testing cases xxx",
-  imgUrl:
-    "https://sabatohura.github.io/my-brand/assets/images/projects/project-blog.png",
-  content:
-    " Entering and Succeeding in a Tech Career: The Keys to Success to validate Entering and Succeeding in a Tech Career: The Keys to Success Test",
-};
+const ENV_DB_CLUSTER_URL = process.env.MONGO_DB_CLUSTER_URI_TEST;
+const ENV_DB_PASS = process.env.MONGO_DB_PASSWORD_TEST;
+const DB_URI = ENV_DB_CLUSTER_URL.replace("<password>", ENV_DB_PASS);
 
-describe("blog", () => {
-  beforeAll(async () => {
-    const mongoServer = await MongoMemoryServer.create();
-    await mongoose.connect(mongoServer.getUri());
+beforeAll(async () => {
+  await mongoose.connect(DB_URI);
+}, 50000);
+
+afterAll(async () => {
+  await mongoose.connection.close();
+});
+
+describe("Testing API", () => {
+  it("/api/* for 404", async () => {
+    await supertest(app).get("/api/*").expect(404);
   });
+});
 
-  afterAll(async () => {
-    await mongoose.disconnect();
-  });
-
-  describe("get blog route", () => {
-    describe("given the blog does not exist", () => {
-      it("should return a 404", async () => {
-        const blogId = "blog-123";
-        await supertest(app).get(`/api/blogs/${blogId}`).expect(404);
+describe("Blog API", () => {
+  describe("GetBlog Api", () => {
+    describe("Get All Blogs", () => {
+      it("All blogs found (200)", async () => {
+        await supertest(app).get("/api/blogs").expect(200);
       });
     });
 
-    // describe("given the blog does exist", () => {
-    //   it("should return a 200 status and the blog", async () => {
-    //     // @ts-ignore
-    //     const blog = await createSBlog(blogPayLoad);
-
-    //     const { body } = await supertest(app).get(`/api/blogs/`);
-    //     expect(200);
-    //   });
-    // });
-  });
-
-  describe("create blog route", () => {
-    describe("given the user is not logged in", () => {
-      it("should return a 403", async () => {
-        const { statusCode } = await supertest(app).post("/api/blogs");
-        expect(403);
+    describe("Get Single Blog", () => {
+      it("no blog found 404", async () => {
+        const blogId = "blog-001";
+        await supertest(app).get(`/api/blogs/${blogId}`).expect(404);
+      });
+      it("blog found 200", async () => {
+        const blogId = "65ca5fdd5aaf79101bfd0213";
+        await supertest(app).get(`/api/blogs/${blogId}`).expect(200);
       });
     });
   });

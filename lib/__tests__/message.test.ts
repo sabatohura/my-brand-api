@@ -1,16 +1,35 @@
+import { config } from "dotenv";
+import { test, it, describe, expect, beforeAll, afterAll } from "@jest/globals";
+import mongoose from "mongoose";
 import * as supertest from "supertest";
-import app from "../config/test";
+import app from "./../index";
+config();
 
-const messageBody = {
-  senderName: "Hakizimana tests",
-  senderEmail: "mesabato123@tests.com",
-  message: "Test four message sabato is sending form tests",
-};
+const ENV_DB_CLUSTER_URL = process.env.MONGO_DB_CLUSTER_URI_TEST;
+const ENV_DB_PASS = process.env.MONGO_DB_PASSWORD_TEST;
+const DB_URI = ENV_DB_CLUSTER_URL.replace("<password>", ENV_DB_PASS);
 
-describe("user can send message", () => {
-  describe("post message route", () => {
-    it("should return 200 and create a message", async () => {
-      await supertest(app).post(`/api/message`).send(messageBody).expect(200);
+beforeAll(async () => {
+  await mongoose.connect(DB_URI);
+}, 50000);
+
+afterAll(async () => {
+  await mongoose.connection.close();
+});
+
+describe("Message API", () => {
+  describe("Post Message Api", () => {
+    it("Send message successfull", async () => {
+      const messagePayload = {
+        senderName: "Hakizimana Jest",
+        senderEmail: "mesabato123@gmail.com",
+        message: "Jest message sabato is sending",
+      };
+      await supertest(app)
+        .post("/api/message")
+        .send(messagePayload)
+        .expect(200);
     });
   });
+
 });

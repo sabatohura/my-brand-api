@@ -2,6 +2,10 @@
 module.exports = {
   preset: "ts-jest",
   testEnvironment: "node",
+  testEnvironmentOptions: {
+    NODE_ENV: "test",
+    PORT: 6050,
+  },
 };
 
 // /** @type {import('ts-jest').JestConfigWithTsJest} */
@@ -14,10 +18,7 @@ module.exports = {
 
 //   verbose: true,
 //   forceExit: true,
-//   testEnvironmentOptions: {
-//     NODE_ENV: "test",
-//     PORT: 6050,
-//   },
+
 //   // clearMocks: true,
 //   // resetMocks: true,
 //   // restoreMocks: true,
