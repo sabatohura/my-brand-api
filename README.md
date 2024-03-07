@@ -1,4 +1,4 @@
-[![codecov](https://codecov.io/gh/sabatohura/my-brand-api/graph/badge.svg?token=J8IWNEUKC4)](https://codecov.io/gh/sabatohura/my-brand-api)
+[![Coverage Status](https://coveralls.io/repos/github/sabatohura/my-brand-api/badge.svg?branch=main)](https://coveralls.io/github/sabatohura/my-brand-api?branch=main)
 
 # My Brand APP API
 
