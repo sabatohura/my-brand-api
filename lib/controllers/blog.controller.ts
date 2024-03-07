@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { Like, blogModel } from "../models";
+import { Like, blogComment, blogModel } from "../models";
 import { createBlogValidate } from "../utils/validations";
 import uploadImage from "../config/cloudinary";
 
@@ -43,9 +43,13 @@ const listBlog = async (req: Request, res: Response) => {
     const updatedBlogs = await Promise.all(
       blogs.map(async (blog) => {
         const blogLikes = await Like.countDocuments({ blog: blog._id });
+        const blogComments = await blogComment.countDocuments({
+          blog: blog._id,
+        });
         return {
           ...blog.toObject(),
           likes: blogLikes,
+          comments: blogComments,
         };
       })
     );
@@ -70,7 +74,16 @@ const deleteBlog = async (req: Request, res: Response) => {
 const getSingleBlog = async (req: Request, res: Response) => {
   try {
     const blog = await Blog.findOne({ _id: req.params.id });
-    res.status(200).send(blog);
+    const blogLikes = await Like.countDocuments({ blog: blog._id });
+    const blogComments = await blogComment.countDocuments({
+      blog: blog._id,
+    });
+    const updateBlog = {
+      ...blog.toObject(),
+      likes: blogLikes,
+      comments: blogComments,
+    };
+    res.status(200).send(updateBlog);
   } catch {
     res.status(404).send({ error: "Blog doesn't exist!" });
   }
@@ -116,6 +129,24 @@ const likeBlog = async (req: Request, res: Response) => {
   }
 };
 
+const getUserLikedBlog = async (req: Request, res: Response) => {
+  try {
+    const like = await Like.findOne({
+      blog: req.params.id,
+      user: req.user,
+    });
+    if (like) {
+      res.status(200).send({ status: "Liked", action: "Unlike" });
+    } else {
+      res.status(200).send({ status: "Unliked", action: "Like" });
+    }
+  } catch (error) {
+    res.status(503).send({
+      error: `could not get like status`,
+    });
+  }
+};
+
 export {
   listBlog,
   createBlog,
@@ -123,4 +154,5 @@ export {
   getSingleBlog,
   updateBlog,
   likeBlog,
+  getUserLikedBlog,
 };

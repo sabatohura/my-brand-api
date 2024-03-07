@@ -5,6 +5,7 @@ import {
   getSingleBlog,
   updateBlog,
   likeBlog,
+  getUserLikedBlog,
 } from "./blog.controller";
 
 import {
@@ -40,4 +41,5 @@ export {
   sendMessage,
   updateMessageStatus,
   likeBlog,
+  getUserLikedBlog,
 };

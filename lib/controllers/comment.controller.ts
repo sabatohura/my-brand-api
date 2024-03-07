@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { blogComment } from "../models";
+import { appUser, blogComment, blogModel } from "../models";
 import { commentMessageValidate } from "../utils/validations";
 
 const Comment = blogComment;
@@ -9,7 +9,24 @@ const listBlogComments = async (req: Request, res: Response) => {
       blog: req.params.id,
       status: "Approved",
     });
-    res.status(200).send({ comments: comments });
+    const updateComments = await Promise.all(
+      comments.map(async (comment) => {
+        const user = await appUser.findById(comment.user);
+        if (user) {
+          return {
+            ...comment.toObject(),
+            authorName: user.fullNames,
+          };
+        } else {
+          return {
+            ...comment.toObject(),
+            authorName: "Unknown",
+          };
+        }
+      })
+    );
+
+    res.status(200).send({ comments: updateComments });
   } catch {
     res.status(204).send({ message: "blog has no comments" });
   }
@@ -17,7 +34,27 @@ const listBlogComments = async (req: Request, res: Response) => {
 
 const listallBlogComments = async (req: Request, res: Response) => {
   const comments = await Comment.find();
-  res.status(200).send({ Comments: comments });
+  const updateComments = await Promise.all(
+    comments.map(async (comment) => {
+      const user = await appUser.findById(comment.user);
+      const blog = await blogModel.findById(comment.blog);
+      if (user && blog) {
+        return {
+          ...comment.toObject(),
+          authorName: user.fullNames,
+          blogTitle: blog.title,
+        };
+      } else {
+        return {
+          ...comment.toObject(),
+          authorName: "Unknown",
+          blogTitle: "Unkonown",
+        };
+      }
+    })
+  );
+
+  res.status(200).send({ Comments: updateComments });
 };
 
 const deleteComment = async (req: Request, res: Response) => {

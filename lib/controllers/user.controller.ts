@@ -41,42 +41,41 @@ export const userLogin = async (
   res: express.Response,
   next: express.NextFunction
 ) => {
-  const valid = loginValidate(req.body);
-  if (!valid.error) {
-    try {
-      const user = await appUser.findOne({ email: req.body.email });
-      if (!user) {
-        res.status(401).send({ error: "incorrect username or password" });
-      }
-      const matchPassword = await bcrypt.compare(
-        req.body.password,
-        user.password
-      );
-
-      if (!matchPassword) {
-        res.status(401).send({ error: "Incorrect username or password" });
-      }
-
-      const payload = {
-        email: user.email,
-        id: user._id,
-      };
-
-      const token = jwt.sign(payload, process.env.JWT_SECRET, {
-        expiresIn: process.env.JWT_EXPIRE,
+  try {
+    const valid = loginValidate(req.body);
+    if (valid.error) {
+      return res.status(400).send({
+        error: `Please provide valid ${valid.error.details[0].path}`,
       });
-
-      return res.status(200).send({
-        message: "logged in",
-        success: true,
-        token: "Bearer " + token,
-      });
-    } catch (error) {
-      res.status(503).send({ error: `Login failed please try again later` });
     }
-  } else {
-    res.status(400).send({
-      error: `Please provide valid ${valid.error.details[0].path}`,
+    const user = await appUser.findOne({ email: req.body.email });
+    if (!user) {
+      return res.status(401).send({ error: "Incorrect username or password" });
+    }
+    const matchPassword = await bcrypt.compare(
+      req.body.password,
+      user.password
+    );
+    if (!matchPassword) {
+      return res.status(401).send({ error: "Incorrect username or password" });
+    }
+    const payload = {
+      email: user.email,
+      id: user._id,
+    };
+    const token = jwt.sign(payload, process.env.JWT_SECRET, {
+      expiresIn: process.env.JWT_EXPIRE,
     });
+    return res.status(200).send({
+      message: "logged in",
+      success: true,
+      role: user.role,
+      token: "Bearer " + token,
+    });
+  } catch (error) {
+    console.error(error);
+    return res
+      .status(503)
+      .send({ error: "Login failed, please try again later" });
   }
 };
