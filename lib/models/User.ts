@@ -4,6 +4,9 @@ import * as bcrypt from "bcrypt";
 export interface IUser extends Document {
   email: string;
   password: string;
+  role: string;
+  fullNames: string;
+  status: string;
 }
 
 const User = new mongoose.Schema({
