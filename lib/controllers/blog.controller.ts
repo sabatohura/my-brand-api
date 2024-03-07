@@ -92,6 +92,11 @@ const getSingleBlog = async (req: Request, res: Response) => {
 const updateBlog = async (req: Request, res: Response) => {
   try {
     const blog = await Blog.findOne({ _id: req.params.id });
+    const uploadedImage = await uploadImage(req.file.buffer);
+
+    if (req.file) {
+      blog.imgUrl = uploadedImage;
+    }
 
     if (req.body.title) {
       blog.title = req.body.title;

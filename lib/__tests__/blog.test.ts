@@ -36,10 +36,6 @@ describe("Blog API", () => {
         const blogId = "blog-001";
         await supertest(app).get(`/api/blogs/${blogId}`).expect(404);
       });
-      // it("blog found 200", async () => {
-      //   const blogId = "65ca5fdd5aaf79101bfd0213";
-      //   await supertest(app).get(`/api/blogs/${blogId}`).expect(200);
-      // });
     });
   });
 });
