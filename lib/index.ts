@@ -8,19 +8,13 @@ import * as swaggerDoc from "./swagger.json";
 import * as cors from "cors";
 import { config } from "dotenv";
 config();
-
 const redirectToHome = (req: express.Request, res: express.Response) => {
   res.status(301).redirect("https://sabatohura.github.io/my-brand/");
 };
-
 const app: express.Application = express();
-
 const swaggerUI = swaggerUiExpress;
-
 app.use(cors());
-
 app.use(express.json());
-
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
@@ -28,7 +22,6 @@ app.use(
     saveUninitialized: false,
   })
 );
-
 app.use(bodyParser.json());
 app.use(
   bodyParser.urlencoded({

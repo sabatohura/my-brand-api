@@ -37,5 +37,22 @@ describe("Blog API", () => {
         await supertest(app).get(`/api/blogs/${blogId}`).expect(404);
       });
     });
+
+    describe("Get Single Blog", () => {
+      it("no blog found 404", async () => {
+        const blogId = "65ca5fdd5aaf79101bfd0213";
+        await supertest(app).get(`/api/blogs/${blogId}`).expect(404);
+      });
+    });
+
+    describe("create a blog", () => {
+      it("can not create a blog without picture", async () => {
+        let blogObj = {
+          title: "this is a blog title for testing",
+          content: "This is a blog content for testing",
+        };
+        await supertest(app).post("/api/blogs").send(blogObj).expect(401);
+      });
+    });
   });
 });

@@ -31,5 +31,9 @@ describe("Message API", () => {
         .expect(200);
     });
   });
-
+  describe("Get message", () => {
+    it("unauthorized can not get message", async () => {
+      await supertest(app).get("/api/message").expect(401);
+    });
+  });
 });

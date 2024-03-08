@@ -4,6 +4,19 @@ import * as jwt from "jsonwebtoken";
 import { loginValidate, registerValidate } from "../utils/validations";
 import * as bcrypt from "bcrypt";
 
+export const getUsers = async (req: express.Request, res: express.Response) => {
+  try {
+    const users = await appUser.find({});
+    if (users) {
+      res.status(200).send({ message: "Get all users", data: users });
+    } else {
+      res.status(404).send({ error: "could not get user" });
+    }
+  } catch (error) {
+    res.status(503).send({ error: `Error with getting users` });
+  }
+};
+
 export const userRegister = async (
   req: express.Request,
   res: express.Response
