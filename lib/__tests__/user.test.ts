@@ -40,6 +40,10 @@ describe("User API", () => {
         .expect(400);
     });
   });
+  
+  it("only admin get user data", async () => {
+    await supertest(app).get("/api/user").expect(401);
+  });
 
   it("only validated login", async () => {
     let user = {
