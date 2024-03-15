@@ -84,7 +84,6 @@ describe("Blog Comment API", () => {
       });
     });
   });
-  
   it("get all comments with valid credentials", async () => {
     const validUser = {
       email: "mesabato1235@jest.com",
@@ -96,7 +95,19 @@ describe("Blog Comment API", () => {
       .set("Authorization", `Bearer ${token}`)
       .expect(200);
   });
-
+  describe("Get message", () => {
+    it(" get message", async () => {
+      const validUser = {
+        email: "mesabato1235@jest.com",
+        password: "1234567xxxx",
+      };
+      const token: string = await generateJwtToken(validUser);
+      await supertest(app)
+        .get("/api/message")
+        .set("Authorization", `Bearer ${token}`)
+        .expect(200);
+    });
+  });
   describe("Create a comment", () => {
     let commentContent = {};
     it("blog to comment not found", async () => {
